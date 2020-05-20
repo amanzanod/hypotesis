@@ -2,39 +2,39 @@ version: '3'
 
 services:
   hypotesis_manager:
-      build: hypotesis_manager/.
-      container_name: hypotesis_manager
-      image: hypotesis_manager:latest
-      #command: python manage.py runserver
-      env_file:
-        - hypotesis_manager/.env
-      #expose:
-      #  - 8000
-      ports:
-        - 8000:8000
-      networks:
-        - hypotesis_vpc
-      volumes:
-        - ./hypotesis_manager:/srv
-      # - ./hypotesis_manager:/usr/src/app
-      stdin_open: true
-      tty: true
-      #depends_on:
-      #  - hypotesis_db
-  #ypotesis_db:
-  # build: hypotesis_db/.
-  # container_name: hypotesis_db
-  # image: hypotesis_db:latest
-  # command: mysqld --default-authentication-plugin=mysql_native_password
-  # env_file:
-  #   - hypotesis_db/.env
-  # expose:
-  #   - 3307
-  # ports:
-  #   - 3306:3307
-  # networks:
-  #   - hypotesis_vpc
-  # #stdin_open: true
+    build: hypotesis_manager/.
+    container_name: hypotesis_manager
+    image: hypotesis_manager:latest
+    working_dir: ${HYP_MANAGER_WORKDIR}
+    env_file:
+      - hypotesis_manager/.env
+    environment:
+      - HYP_LOCAL_IP=${HYP_LOCAL_IP}
+      - URL_PORT=${HYP_MANAGER_SERVER}:${HYP_MANAGER_PORT}
+    ports:
+      - 8000:${HYP_MANAGER_PORT}
+    volumes:
+      - ./hypotesis_manager:${HYP_MANAGER_WORKDIR}
+    stdin_open: true
+    tty: true
+    networks:
+      - hypotesis_vpc
+    #depends_on:
+    #  - hypotesis_db
+  hypotesis_db:
+    build: hypotesis_db/.
+    container_name: hypotesis_db
+    image: hypotesis_db:latest
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    env_file:
+      - hypotesis_db/.env
+    expose:
+      - 3307
+    ports:
+      - 3306:3307
+    networks:
+      - hypotesis_vpc
+    #stdin_open: true
 
 networks:
   hypotesis_vpc:
