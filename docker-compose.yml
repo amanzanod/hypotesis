@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  hypotesis_manager:
+      build: hypotesis_manager/.
+      container_name: hypotesis_manager
+      #image: hypotesis_manager:latest
+      env_file:
+        - hypotesis_manager/.env
+      expose:
+        - 8081
+      ports:
+        - 8081:80
+      networks:
+        - hypotesis_vpc
+      #volumes:
+      # - ./moodle:/var/www/moodle
+      stdin_open: true
+      tty: true
+      #depends_on:
+      #  - moodle_parent
+  hypotesis_db:
+    build: hypotesis_db/.
+    container_name: hypotesis_db
+    #image: hypotesis_db:latest
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    env_file:
+      - hypotesis_db/.env
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    networks:
+      - hypotesis_vpc
+    stdin_open: true
+
+networks:
+  hypotesis_vpc:
+    driver: bridge
