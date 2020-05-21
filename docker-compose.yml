@@ -1,7 +1,21 @@
 version: '3'
 
 services:
+
+  ## HYPOTESIS DJANGO
+  hypotesis_django:
+    build: hypotesis_django/.
+    container_name: hypotesis_django
+    image: hypotesis_django:latest
+    working_dir: ${HYP_DJANGO_WORKDIR}
+    env_file:
+      - hypotesis_django/.env
+    depends_on:
+      - hypotesis_db
+
+  ## HYPOTESIS MANAGER
   hypotesis_manager:
+    #restart: always
     build: hypotesis_manager/.
     container_name: hypotesis_manager
     image: hypotesis_manager:latest
@@ -11,6 +25,14 @@ services:
     environment:
       - HYP_LOCAL_IP=${HYP_LOCAL_IP}
       - URL_PORT=${HYP_MANAGER_SERVER}:${HYP_MANAGER_PORT}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - HYP_DB_IP=${HYP_DB_IP}
+      - HYP_DB_PORT=${HYP_DB_PORT}
+      - HYP_MANAGER_SUPER_USER=${HYP_MANAGER_SUPER_USER}
+      - HYP_MANAGER_SUPER_USER_EMAIL=${HYP_MANAGER_SUPER_USER_EMAIL}
+      - HYP_MANAGER_SUPER_USER_PASS=${HYP_MANAGER_SUPER_USER_PASS}
     ports:
       - 8000:${HYP_MANAGER_PORT}
     volumes:
@@ -18,24 +40,35 @@ services:
     stdin_open: true
     tty: true
     networks:
-      - hypotesis_vpc
-    #depends_on:
-    #  - hypotesis_db
+      hypotesis_vpc:
+        ipv4_address: 172.20.128.2
+    depends_on:
+      - hypotesis_django
+      - hypotesis_db
+
+  ## HYPOTESIS DB
   hypotesis_db:
     build: hypotesis_db/.
     container_name: hypotesis_db
     image: hypotesis_db:latest
     command: mysqld --default-authentication-plugin=mysql_native_password
-    env_file:
-      - hypotesis_db/.env
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     expose:
-      - 3307
+      - 3306
     ports:
-      - 3306:3307
+      - 3306:${HYP_DB_PORT}
+    security_opt:
+      - seccomp:unconfined
     networks:
-      - hypotesis_vpc
-    #stdin_open: true
+      hypotesis_vpc:
+        ipv4_address: ${HYP_DB_IP}
 
 networks:
   hypotesis_vpc:
-    driver: bridge
+    ipam:
+      config:
+        - subnet: ${HYP_VPC_RANGE}

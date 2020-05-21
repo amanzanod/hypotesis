@@ -1,12 +1,15 @@
-FROM python:3.8.3
+FROM hypotesis_django:latest
 
 LABEL maintainer="Antonio Manzano Díaz<amanzanod@uoc.edu>"
 
 ENV URL_PORT $URL_PORT
+ENV HYP_MANAGER_SUPER_USER $HYP_MANAGER_SUPER_USER
+ENV HYP_MANAGER_SUPER_USER_EMAIL $HYP_MANAGER_SUPER_USER_EMAIL
+ENV HYP_MANAGER_SUPER_USER_PASS $HYP_MANAGER_SUPER_USER_PASS
 
 COPY requirements.txt .
+COPY deploy_django.sh .
 
 RUN pip install -r requirements.txt
-#RUN python manage.py migrate
 
-CMD python manage.py runserver $URL_PORT
+CMD /bin/bash deploy_django.sh $URL_PORT $HYP_MANAGER_SUPER_USER $HYP_MANAGER_SUPER_USER_EMAIL $HYP_MANAGER_SUPER_USER_PASS
