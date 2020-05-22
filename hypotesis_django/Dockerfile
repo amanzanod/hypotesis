@@ -5,6 +5,7 @@ LABEL maintainer="Antonio Manzano Díaz<amanzanod@uoc.edu>"
 RUN apt-get update -y
 RUN apt-get install python3-dev -y
 RUN apt-get install default-libmysqlclient-dev -y
+RUN apt-get install gettext -y
 
 COPY requirements.txt .
 

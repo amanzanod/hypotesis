@@ -9,3 +9,23 @@ Trabajo Final del Grado Multimedia
 docker-compose up
 ```
 
+
+## Django
+
+Comandos más utilizados en Django
+
+### Crear una migración
+```
+python manage.py makemigrations
+```
+
+### Ejecutar una migración
+```
+python manage.py migrate
+```
+
+### Ejecutar traducciones
+```
+django-admin makemessages -l es
+```
+
