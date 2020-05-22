@@ -24,7 +24,12 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-### Ejecutar aplicación
+### Crear proyecto
+```
+django-admin startproject hypotesis_context
+```
+
+### Crear aplicación
 ```
 python manage.py startapp context
 ```

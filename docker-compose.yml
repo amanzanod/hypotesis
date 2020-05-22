@@ -34,14 +34,47 @@ services:
       - HYP_MANAGER_SUPER_USER_EMAIL=${HYP_MANAGER_SUPER_USER_EMAIL}
       - HYP_MANAGER_SUPER_USER_PASS=${HYP_MANAGER_SUPER_USER_PASS}
     ports:
-      - 8000:${HYP_MANAGER_PORT}
+      - ${HYP_MANAGER_PORT}:${HYP_MANAGER_PORT}
     volumes:
       - ./hypotesis_manager:${HYP_MANAGER_WORKDIR}
     stdin_open: true
     tty: true
     networks:
       hypotesis_vpc:
-        ipv4_address: 172.20.128.2
+        ipv4_address: ${HYP_MANAGER_IP}
+    depends_on:
+      - hypotesis_django
+      - hypotesis_db
+
+  ## HYPOTESIS CONTEXT
+  hypotesis_context:
+    #restart: always
+    build: hypotesis_context/.
+    container_name: hypotesis_context
+    image: hypotesis_context:latest
+    working_dir: ${HYP_CONTEXT_WORKDIR}
+    env_file:
+      - hypotesis_context/.env
+    environment:
+      - HYP_LOCAL_IP=${HYP_LOCAL_IP}
+      - URL_PORT=${HYP_CONTEXT_SERVER}:${HYP_CONTEXT_PORT}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - HYP_DB_IP=${HYP_DB_IP}
+      - HYP_DB_PORT=${HYP_DB_PORT}
+      - HYP_CONTEXT_SUPER_USER=${HYP_CONTEXT_SUPER_USER}
+      - HYP_CONTEXT_SUPER_USER_EMAIL=${HYP_CONTEXT_SUPER_USER_EMAIL}
+      - HYP_CONTEXT_SUPER_USER_PASS=${HYP_CONTEXT_SUPER_USER_PASS}
+    ports:
+      - ${HYP_CONTEXT_PORT}:${HYP_CONTEXT_PORT}
+    volumes:
+      - ./hypotesis_context:${HYP_CONTEXT_WORKDIR}
+    stdin_open: true
+    tty: true
+    networks:
+      hypotesis_vpc:
+        ipv4_address: ${HYP_CONTEXT_IP}
     depends_on:
       - hypotesis_django
       - hypotesis_db
@@ -58,9 +91,9 @@ services:
       - MYSQL_USER=hypotesis
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     expose:
-      - 3306
+      - ${HYP_DB_PORT}
     ports:
-      - 3306:${HYP_DB_PORT}
+      - ${HYP_DB_PORT}:${HYP_DB_PORT}
     security_opt:
       - seccomp:unconfined
     volumes:
