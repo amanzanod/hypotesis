@@ -4,7 +4,7 @@ from .models import Context, Role, PermissionRole, Permission, User
 
 
 # User Admin.
-class UserAdmin(admin.ModelAdmin):
+class UserCoreAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at', 'state_at', 'visible_at')
     exclude = ('token',)
 
@@ -20,7 +20,7 @@ class PermissionAdmin(admin.ModelAdmin):
 
 
 # Context Admin.
-class ContextAdmin(admin.ModelAdmin):
+class ContextCoreAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
 
 
@@ -30,8 +30,8 @@ class PermissionRoleAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
-admin.site.register(User, UserAdmin)
-admin.site.register(Context, ContextAdmin)
+admin.site.register(User, UserCoreAdmin)
+admin.site.register(Context, ContextCoreAdmin)
 admin.site.register(Role, RoleAdmin)
 admin.site.register(Permission, PermissionAdmin)
 admin.site.register(PermissionRole, PermissionRoleAdmin)

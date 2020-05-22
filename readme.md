@@ -24,6 +24,11 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
+### Ejecutar aplicación
+```
+python manage.py startapp context
+```
+
 ### Ejecutar traducciones
 ```
 django-admin makemessages -l es

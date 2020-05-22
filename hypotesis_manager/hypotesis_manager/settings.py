@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'manager'
+    'manager',
+    'context'
 ]
 
 MIDDLEWARE = [
@@ -71,15 +72,26 @@ WSGI_APPLICATION = 'hypotesis_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+DATABASE_ROUTERS = ['hypotesis_manager.databases.contextrouter.ContextRouter']
+DATABASE_APPS_MAPPING = {'context': 'hypotesis_context', 'default': 'default'}
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE', ''),
-        'USER': os.environ.get('MYSQL_USER', ''),
+        'NAME': 'hypotesis_manager',
+        'USER': 'hypotesis',
         'PASSWORD': os.environ.get('MYSQL_PASSWORD', ''),
         'HOST': os.environ.get('HYP_DB_IP', ''),
         'PORT': os.environ.get('HYP_DB_PORT', ''),
-    }
+    },
+    'hypotesis_context': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'hypotesis_context',
+        'USER': 'hypotesis',
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', ''),
+        'HOST': os.environ.get('HYP_DB_IP', ''),
+        'PORT': os.environ.get('HYP_DB_PORT', ''),
+    },
 }
 
 # Password validation

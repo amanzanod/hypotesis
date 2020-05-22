@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.translation import gettext_lazy as _
-from django.utils.timezone import now as timezone_now
 
 
 # Base Model.

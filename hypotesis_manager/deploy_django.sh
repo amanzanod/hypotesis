@@ -15,6 +15,7 @@ echo "Running ..."
 # Apply database migrations
 echo "Apply database migrations..."
 python manage.py migrate --noinput
+python manage.py migrate --database=hypotesis_context --noinput
 # Start server
 echo "Starting server..."
 python manage.py runserver "$1"

@@ -55,7 +55,7 @@ services:
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_USER=hypotesis
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     expose:
       - 3306
@@ -63,6 +63,8 @@ services:
       - 3306:${HYP_DB_PORT}
     security_opt:
       - seccomp:unconfined
+    volumes:
+      - ./docker/provision/hypotesis_db:/docker-entrypoint-initdb.d
     networks:
       hypotesis_vpc:
         ipv4_address: ${HYP_DB_IP}
