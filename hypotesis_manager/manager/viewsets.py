@@ -1,14 +1,14 @@
 from rest_framework import viewsets
 
-from .models import User, Role, Permission, PermissionRole, Context
-from .serializer import UserSerializer, RoleSerializer, PermissionSerializer, PermissionRoleSerializer, \
+from .models import UserManager, Role, Permission, PermissionRole, Context
+from .serializer import UserManagerSerializer, RoleSerializer, PermissionSerializer, PermissionRoleSerializer, \
     ContextSerializer
 
 
-# User ViewSet.
+# User Manager ViewSet.
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = UserManager.objects.all()
+    serializer_class = UserManagerSerializer
 
 
 # Context ViewSet.

@@ -5,7 +5,6 @@ sleep 0m 30s
 echo "30s"
 sleep 0m 30s
 echo "1m00s"
-sleep 0m 30s
 echo "Running ..."
 # Collect static files
 #echo "Collect static files"

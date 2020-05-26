@@ -17,6 +17,7 @@ Comandos más utilizados en Django
 ### Crear una migración
 ```
 python manage.py makemigrations
+python manage.py makemigrations --empty manager
 ```
 
 ### Ejecutar una migración

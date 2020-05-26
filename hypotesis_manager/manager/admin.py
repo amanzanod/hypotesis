@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from .models import Context, Role, PermissionRole, Permission, User
+from .models import UserManager, Context, Role, PermissionRole, Permission
 
 
 # User Admin.
-class UserCoreAdmin(admin.ModelAdmin):
+class UserManagerAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at', 'state_at', 'visible_at')
     exclude = ('token',)
 
@@ -30,7 +30,7 @@ class PermissionRoleAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
-admin.site.register(User, UserCoreAdmin)
+admin.site.register(UserManager, UserManagerAdmin)
 admin.site.register(Context, ContextCoreAdmin)
 admin.site.register(Role, RoleAdmin)
 admin.site.register(Permission, PermissionAdmin)

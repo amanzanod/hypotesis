@@ -1,14 +1,14 @@
 from rest_framework import serializers
 
-from .models import User, Role, Permission, PermissionRole, Context
+from .models import UserManager, Role, Permission, PermissionRole, Context
 
 
 # User Serializer.
-class UserSerializer(serializers.ModelSerializer):
+class UserManagerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = UserManager
         fields = (
-            'id', 'username', 'password', 'is_visible', 'state', 'picture', 'name', 'surname1', 'surname2',
+            'username', 'password', 'is_visible', 'state', 'picture', 'name', 'surname1', 'surname2',
             'title', 'email', 'city', 'province', 'country', 'address', 'postal_code', 'language', 'about_me',
             'role', 'created_at', 'updated_at')
         extra_kwargs = {
@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 class ContextSerializer(serializers.ModelSerializer):
     class Meta:
         model = Context
-        fields = ('id', 'alias', 'name')
+        fields = ('alias', 'name')
         extra_kwargs = {
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
@@ -33,7 +33,7 @@ class ContextSerializer(serializers.ModelSerializer):
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
-        fields = ('id', 'alias', 'name', 'state', 'is_visible', 'icon', 'description', 'created_at', 'updated_at')
+        fields = ('alias', 'name', 'state', 'is_visible', 'icon', 'description', 'created_at', 'updated_at')
         extra_kwargs = {
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
@@ -44,7 +44,7 @@ class RoleSerializer(serializers.ModelSerializer):
 class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
-        fields = ('id', 'alias', 'state', 'is_visible', 'description', 'context', 'created_at', 'updated_at', 'roles')
+        fields = ('alias', 'state', 'is_visible', 'description', 'context', 'created_at', 'updated_at', 'roles')
         extra_kwargs = {
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
