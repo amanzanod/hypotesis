@@ -25,7 +25,7 @@ SECRET_KEY = 'cgncni20&w&s)u69ho!0#myl9&ic%&f+zv6%1ez$mc_9qmv5lm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = [os.environ.get('HYP_LOCAL_IP', '')]
 
 # Application definition
 
@@ -79,9 +79,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hypotesis_context',
         'USER': 'hypotesis',
-        'PASSWORD': '1234',
-        'HOST': '192.168.99.100',
-        'PORT': '3306',
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', ''),
+        'HOST': os.environ.get('HYP_DB_IP', ''),
+        'PORT': os.environ.get('HYP_DB_PORT', ''),
     },
 }
 

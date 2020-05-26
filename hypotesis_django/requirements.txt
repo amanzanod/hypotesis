@@ -1,5 +1,5 @@
 Django==3.0.6
 mysqlclient==1.4.6
-Pillow==2.1.0
+Pillow==7.1.2
 djangorestframework==3.11.0
 django-filter===2.2.0

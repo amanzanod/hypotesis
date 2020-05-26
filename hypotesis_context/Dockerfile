@@ -12,4 +12,4 @@ COPY deploy_django.sh .
 
 RUN pip install -r requirements.txt
 
-#CMD /bin/bash deploy_django.sh $URL_PORT $HYP_CONTEXT_SUPER_USER $HYP_CONTEXT_SUPER_USER_EMAIL $HYP_CONTEXT_SUPER_USER_PASS
+CMD /bin/bash deploy_django.sh $URL_PORT $HYP_CONTEXT_SUPER_USER $HYP_CONTEXT_SUPER_USER_EMAIL $HYP_CONTEXT_SUPER_USER_PASS

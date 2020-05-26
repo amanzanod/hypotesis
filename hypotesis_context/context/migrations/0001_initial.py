@@ -6,9 +6,9 @@ import os
 
 
 def forwards_func(apps, schema_editor):
-    admin_username = os.environ.get('HYP_MANAGER_SUPER_USER', 'admin')
-    admin_email = os.environ.get('HYP_MANAGER_SUPER_USER_EMAIL', '')
-    admin_pass = os.environ.get('HYP_MANAGER_SUPER_USER_PASS', '1234')
+    admin_username = os.environ.get('HYP_CONTEXT_SUPER_USER', 'admin')
+    admin_email = os.environ.get('HYP_CONTEXT_SUPER_USER_EMAIL', '')
+    admin_pass = os.environ.get('HYP_CONTEXT_SUPER_USER_PASS', '1234')
 
     try:
         User.objects.create_superuser(admin_username, email=admin_email, password=admin_pass)

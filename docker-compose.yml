@@ -15,7 +15,7 @@ services:
 
   ## HYPOTESIS MANAGER
   hypotesis_manager:
-    #restart: always
+    restart: always
     build: hypotesis_manager/.
     container_name: hypotesis_manager
     image: hypotesis_manager:latest
@@ -48,7 +48,7 @@ services:
 
   ## HYPOTESIS CONTEXT
   hypotesis_context:
-    #restart: always
+    restart: always
     build: hypotesis_context/.
     container_name: hypotesis_context
     image: hypotesis_context:latest

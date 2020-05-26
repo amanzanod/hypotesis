@@ -1,21 +1,19 @@
 #!/bin/bash
 echo "*** EXECUTING DJANGO HYPOTESIS CONTEXT ... ***"
 echo "Wait for DB ..."
-#sleep 0m 15s
-echo "15s"
-#sleep 0m 15s
+sleep 0m 30s
 echo "30s"
-#sleep 0m 15s
-echo "45s"
-#sleep 0m 15s
+sleep 0m 30s
+echo "1m00s"
+sleep 0m 30s
 echo "Running ..."
 # Collect static files
 #echo "Collect static files"
 #python manage.py collectstatic --noinput
 # Apply database migrations
 echo "Apply database migrations..."
-#python manage.py migrate --noinput
+python manage.py migrate --noinput
 # Start server
 echo "Starting server..."
-#python manage.py runserver "$1"
+python manage.py runserver "$1"
 echo "*** EXECUTING DJANGO END > ***"
