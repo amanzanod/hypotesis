@@ -132,6 +132,7 @@ class Context(BaseModel):
     format = models.ForeignKey('Format', on_delete=models.CASCADE, null=True,
                                to_field='alias', verbose_name=_('format'))
     state = models.ForeignKey('State', on_delete=models.CASCADE, to_field='alias', verbose_name=_('state'))
+    is_visible = models.BooleanField(default=False, null=False, verbose_name=_('is visible'))
     # Description fields.
     description = models.TextField(max_length=500, null=True, blank=True, verbose_name=_('description'))
     picture = models.ImageField(null=True, blank=True, verbose_name=_('picture'))
