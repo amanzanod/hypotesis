@@ -79,6 +79,72 @@ services:
       - hypotesis_django
       - hypotesis_db
 
+  ## HYPOTESIS ENROL
+  hypotesis_enrol:
+    restart: always
+    build: hypotesis_enrol/.
+    container_name: hypotesis_enrol
+    image: hypotesis_enrol:latest
+    working_dir: ${HYP_ENROL_WORKDIR}
+    env_file:
+      - hypotesis_enrol/.env
+    environment:
+      - HYP_LOCAL_IP=${HYP_LOCAL_IP}
+      - URL_PORT=${HYP_ENROL_SERVER}:${HYP_ENROL_PORT}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - HYP_DB_IP=${HYP_DB_IP}
+      - HYP_DB_PORT=${HYP_DB_PORT}
+      - HYP_ENROL_SUPER_USER=${HYP_ENROL_SUPER_USER}
+      - HYP_ENROL_SUPER_USER_EMAIL=${HYP_ENROL_SUPER_USER_EMAIL}
+      - HYP_ENROL_SUPER_USER_PASS=${HYP_ENROL_SUPER_USER_PASS}
+    ports:
+      - ${HYP_ENROL_PORT}:${HYP_ENROL_PORT}
+    volumes:
+      - ./hypotesis_enrol:${HYP_ENROL_WORKDIR}
+    stdin_open: true
+    tty: true
+    networks:
+      hypotesis_vpc:
+        ipv4_address: ${HYP_ENROL_IP}
+    depends_on:
+      - hypotesis_django
+      - hypotesis_db
+
+  ## HYPOTESIS ITEM
+  hypotesis_item:
+    restart: always
+    build: hypotesis_item/.
+    container_name: hypotesis_item
+    image: hypotesis_item:latest
+    working_dir: ${HYP_ITEM_WORKDIR}
+    env_file:
+      - hypotesis_item/.env
+    environment:
+      - HYP_LOCAL_IP=${HYP_LOCAL_IP}
+      - URL_PORT=${HYP_ITEM_SERVER}:${HYP_ITEM_PORT}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - HYP_DB_IP=${HYP_DB_IP}
+      - HYP_DB_PORT=${HYP_DB_PORT}
+      - HYP_ITEM_SUPER_USER=${HYP_ITEM_SUPER_USER}
+      - HYP_ITEM_SUPER_USER_EMAIL=${HYP_ITEM_SUPER_USER_EMAIL}
+      - HYP_ITEM_SUPER_USER_PASS=${HYP_ITEM_SUPER_USER_PASS}
+    ports:
+      - ${HYP_ITEM_PORT}:${HYP_ITEM_PORT}
+    volumes:
+      - ./hypotesis_item:${HYP_ITEM_WORKDIR}
+    stdin_open: true
+    tty: true
+    networks:
+      hypotesis_vpc:
+        ipv4_address: ${HYP_ITEM_IP}
+    depends_on:
+      - hypotesis_django
+      - hypotesis_db
+
   ## HYPOTESIS DB
   hypotesis_db:
     build: hypotesis_db/.
