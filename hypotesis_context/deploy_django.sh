@@ -3,10 +3,6 @@ echo "*** EXECUTING DJANGO HYPOTESIS CONTEXT ... ***"
 echo "Wait for DB ..."
 sleep 0m 15s
 echo "15s"
-sleep 0m 15s
-echo "30s"
-sleep 0m 15s
-echo "45s"
 echo "Running ..."
 # Collect static files
 #echo "Collect static files"
