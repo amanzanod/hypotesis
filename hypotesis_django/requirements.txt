@@ -3,3 +3,4 @@ mysqlclient==1.4.6
 Pillow==7.1.2
 djangorestframework==3.11.0
 django-filter===2.2.0
+django-cors-headers==3.3.0

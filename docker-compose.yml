@@ -30,11 +30,11 @@ services:
       - ./hypotesis_pro/default.conf:/etc/nginx/conf.d/default.conf
     stdin_open: true
     tty: true
-    depends_on:
-      - hypotesis_manager
-      - hypotesis_context
-      - hypotesis_enrol
-      - hypotesis_item
+    #depends_on:
+    #  - hypotesis_manager
+    # - hypotesis_context
+    # - hypotesis_enrol
+    # - hypotesis_item
 
   ## HYPOTESIS MANAGER
   hypotesis_manager:

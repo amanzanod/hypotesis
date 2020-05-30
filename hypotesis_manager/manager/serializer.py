@@ -1,10 +1,15 @@
 from rest_framework import serializers
+from django.utils.timesince import timesince
 
 from .models import UserManager, Role, Permission, PermissionRole, Context
 
 
 # User Serializer.
 class UserManagerSerializer(serializers.ModelSerializer):
+    role = serializers.StringRelatedField(many=False)
+    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+
     class Meta:
         model = UserManager
         fields = (
@@ -31,6 +36,9 @@ class ContextSerializer(serializers.ModelSerializer):
 
 # Role Serializer.
 class RoleSerializer(serializers.ModelSerializer):
+    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+
     class Meta:
         model = Role
         fields = ('alias', 'name', 'state', 'is_visible', 'icon', 'description', 'created_at', 'updated_at')

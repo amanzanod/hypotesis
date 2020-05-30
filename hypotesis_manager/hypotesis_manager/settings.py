@@ -22,9 +22,30 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '1f06@p!wdzy_8=+awduj4l11i556zb_in9j35@ofyq+(a&4m&$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = [os.environ.get('HYP_LOCAL_IP', '')]
+ALLOWED_HOSTS = [os.environ.get('HYP_LOCAL_IP', ''), 'localhost']
+
+
+# CORS
+
+from corsheaders.defaults import default_headers
+
+CORS_ALLOW_HEADERS = default_headers + (
+    'Access-Control-Allow-Origin',
+)
+
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:8080",
+    "http://192.168.99.100:8080",
+    "http://192.168.99.100",
+    "http://192.168.99.100:8001",
+    "http://192.168.99.100:8002",
+    "http://192.168.99.100:8003",
+    "http://192.168.99.100:80"
+]
 
 # Application definition
 
@@ -36,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'manager',
 ]
 
@@ -48,6 +70,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
 ]
 
 ROOT_URLCONF = 'hypotesis_manager.urls'

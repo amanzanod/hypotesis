@@ -181,13 +181,13 @@ def add_roles(apps, schema_editor):
     role_object = role(name='Profesor Creador', state=state_active, is_visible=True, icon='chalkboard-teacher',
                        alias='teacherpro', visible_at=timezone.now(), state_at=timezone.now(),)
     role_object.save()
-    role_object = role(name='Invitado', state=state_active, is_visible=True, icon='user',
+    role_object = role(name='Invitado', state=state_active, is_visible=True, icon='user-secret',
                        alias='guest', visible_at=timezone.now(), state_at=timezone.now(),)
     role_object.save()
     role_object = role(name='Marketing', state=state_active, is_visible=True, icon='user-tag',
                        alias='marketing', visible_at=timezone.now(), state_at=timezone.now(),)
     role_object.save()
-    role_object = role(name='Identificado', state=state_active, is_visible=True, icon='user-solid',
+    role_object = role(name='Identificado', state=state_active, is_visible=True, icon='user',
                        alias='user', visible_at=timezone.now(), state_at=timezone.now(),)
     role_object.save()
     role_object = role(name='Gestor', state=state_active, is_visible=True, icon='user-cog',
