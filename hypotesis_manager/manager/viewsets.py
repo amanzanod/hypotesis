@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from .models import UserManager, Role, Permission, PermissionRole, Context
 from .serializer import UserManagerSerializer, RoleSerializer, PermissionSerializer, PermissionRoleSerializer, \
@@ -21,6 +23,13 @@ class ContextViewSet(viewsets.ModelViewSet):
 class RoleViewSet(viewsets.ModelViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
+
+    @action(detail=True, methods=['get'])
+    def users(self, request, pk=None):
+        queryset = UserManager.objects.filter(role=pk)
+        serializer = UserManagerSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 
 # Permission ViewSet.

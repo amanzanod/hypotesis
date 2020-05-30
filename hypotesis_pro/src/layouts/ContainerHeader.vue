@@ -2,8 +2,11 @@
 
     <div class="container-header">
         <h1 class="title_container">{{ title }} <span>({{ num }})</span></h1>
+        <router-link v-if="list" to="Users" class="create_entity">
+            <i class="fas fa-plus"></i>
+            <div class="triangle-form"></div>
+        </router-link>
     </div>
-
 </template>
 
 <script>
@@ -11,8 +14,9 @@
     export default {
         name: 'ContainerHeader',
         props: {
-            num: Number,
-            title: String
+            num: String,
+            title: String,
+            list: Boolean
         }
     }
 
@@ -37,6 +41,38 @@
             span {
                 font-weight: 300;
             }
+        }
+        .create_entity {
+            width: 68px;
+            height: 54px;
+            background-color: #64a5af;
+            display: flex;
+            align-items: center;
+            position: absolute;
+            justify-content: center;
+            border-radius: 10px 0 0 10px;
+            font-size: 20px;
+            right: 27px;
+            padding: 0 0 0 8px;
+            &:hover {
+                text-decoration: none;
+                background-color: #7ccbd7;
+            }
+            i.fas {
+                color: white;
+            }
+            .triangle-form {
+                width: 0;
+                height: 0;
+                border-right: 5px solid transparent;
+                border-top: 5px solid #527d84;
+                border-left: 5px solid #527d84;
+                border-bottom: 5px solid transparent;
+                position: relative;
+                top: 32px;
+                left: 16px;
+            }
+
         }
     }
 

@@ -2,9 +2,13 @@
     <header id="header">
         <div class="grey_stripe left"></div>
         <div class="hyp_breadcrumb">
-            <span class="home_button"><i class="fas fa-home"></i></span>
-            <span class="home_text">Inicio</span>
-            <span class="actual">Usuarios</span>
+            <router-link class="link_breadcrumb" to="/">
+                <span class="home_button"><i class="fas fa-home"></i></span>
+            </router-link>
+            <router-link class="link_breadcrumb" to="/">
+                <span class="home_text">Inicio</span>
+            </router-link>
+            <span class="actual">{{ currentRouteName }}</span>
         </div>
         <div class="action_header">
             <label class="label-search">
@@ -27,6 +31,14 @@
 
 <script>
 
+    export default {
+        name: 'Header',
+        computed: {
+            currentRouteName() {
+                return this.$route.meta ? null : this.$route.meta;
+            }
+        }
+    }
 
 
 </script>
@@ -52,6 +64,12 @@
             font-family: "Varela Round", sans-serif;
             font-size: 15px;
             color: #64A5AF;
+            a.link_breadcrumb {
+                color: inherit;
+                &:hover {
+                    text-decoration: none;
+                }
+            }
             .home_button {
                 font-size: 26px;
                 padding-right: 20px;

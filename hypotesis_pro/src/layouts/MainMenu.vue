@@ -11,85 +11,85 @@
             <nav id="menu">
                 <ul class="menu_buttons">
                     <li class="menu_button current">
-                        <router-link to="Users">
+                        <router-link :to="{ name: 'Users'}">
                             <i class="fas fa-users"></i>
                             <span class="button_text">Usuarios</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Roles">
+                        <router-link :to="{ name: 'Roles'}">
                             <i class='fas fa-suitcase-rolling'></i>
                             <span class="button_text tab1">Roles</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Permissions">
+                        <router-link :to="{ name: 'Permissions'}">
                             <i class="fas fa-hammer"></i>
                             <span class="button_text tab1">Permisos</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Contexts">
+                        <router-link :to="{ name: 'Context'}">
                             <i class="fas fa-globe"></i>
                             <span class="button_text">Contextos</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Grades">
+                        <router-link :to="{ name: 'Grades'}">
                             <i class="fas fa-graduation-cap"></i>
                             <span class="button_text tab1">Grados</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Grades">
+                        <router-link :to="{ name: 'Masters'}">
                         <i class="fas fa-medal"></i>
                         <span class="button_text tab1">Máster</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Grades">
+                        <router-link :to="{ name: 'Courses'}">
                         <i class="fas fa-book"></i>
                         <span class="button_text tab1">Cursos</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Grades">
+                        <router-link :to="{ name: 'Classrooms'}">
                         <i class="fas fa-chalkboard"></i>
                         <span class="button_text tab1">Aulas</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Grades">
+                        <router-link :to="{ name: 'Categories'}">
                         <i class="fas fa-copy"></i>
                         <span class="button_text tab1">Categorías</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Grades">
+                        <router-link :to="{ name: 'Notifications'}">
                         <i class="fas fa-bell"></i>
                         <span class="button_text">Notificaciones</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Grades">
+                        <router-link :to="{ name: 'Forum'}">
                         <i class="fas fa-comments"></i>
                         <span class="button_text">Foro</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Grades">
+                        <router-link :to="{ name: 'News'}">
                         <i class="fas fa-newspaper"></i>
                         <span class="button_text">Tablón Anuncios</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Grades">
+                        <router-link :to="{ name: 'Reports'}">
                         <i class="fas fa-chart-line"></i>
                         <span class="button_text">Informes</span>
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link to="Grades">
+                        <router-link :to="{ name: 'Admin'}">
                         <i class="fas fa-cogs"></i>
                         <span class="button_text">Administración</span>
                         </router-link>

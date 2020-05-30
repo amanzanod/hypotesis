@@ -38,13 +38,16 @@ class ContextSerializer(serializers.ModelSerializer):
 class RoleSerializer(serializers.ModelSerializer):
     updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    permissions = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Role
-        fields = ('alias', 'name', 'state', 'is_visible', 'icon', 'description', 'created_at', 'updated_at')
+        fields = ('alias', 'name', 'state', 'is_visible', 'icon', 'description',
+                  'created_at', 'updated_at', 'permissions')
         extra_kwargs = {
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
+            'permissions': {'read_only': True},
         }
 
 

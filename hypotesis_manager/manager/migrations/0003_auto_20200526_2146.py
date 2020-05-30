@@ -172,7 +172,7 @@ def add_roles(apps, schema_editor):
     role_object = role(name='Estudiante', state=state_active, is_visible=True, icon='user-graduate',
                        alias='student', visible_at=timezone.now(), state_at=timezone.now(),)
     role_object.save()
-    role_object = role(name='Profesor', state=state_active, is_visible=True, icon='chalkboard-teacher',
+    role_object = role(name='Profesor', state=state_active, is_visible=True, icon='chalkboard',
                        alias='teacher', visible_at=timezone.now(), state_at=timezone.now(),)
     role_object.save()
     role_object = role(name='Autor', state=state_active, is_visible=True, icon='user-edit',
@@ -181,7 +181,7 @@ def add_roles(apps, schema_editor):
     role_object = role(name='Profesor Creador', state=state_active, is_visible=True, icon='chalkboard-teacher',
                        alias='teacherpro', visible_at=timezone.now(), state_at=timezone.now(),)
     role_object.save()
-    role_object = role(name='Invitado', state=state_active, is_visible=True, icon='user-secret',
+    role_object = role(name='Invitado', state=state_active, is_visible=False, icon='user-secret',
                        alias='guest', visible_at=timezone.now(), state_at=timezone.now(),)
     role_object.save()
     role_object = role(name='Marketing', state=state_active, is_visible=True, icon='user-tag',

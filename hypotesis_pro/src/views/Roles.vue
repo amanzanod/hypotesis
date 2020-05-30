@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="roles" v-bind:title="title"/>
+      <ContainerHeaderApp v-bind:num="roles" v-bind:title="title" v-bind:list="true"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -14,7 +14,6 @@
                   ></b-form-input>
                   <span class="search_input"><i class="fas fa-search"></i></span>
               </div>
-              <b-form-select v-model="selected" :options="options"></b-form-select>
               <span class="filter_options"><i class="fas fa-filter"></i></span>
           </div>
 
@@ -33,6 +32,12 @@
               </template>
               <template v-slot:cell(icon)="icon">
                   <span v-html="icon.value"></span>
+              </template>
+              <template v-slot:cell(permissions)="data">
+                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.permissions.length }} permisos</router-link>
+              </template>
+              <template v-slot:cell(users)="data">
+                  <LinkTable v-bind:item="data.item"/>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
@@ -54,17 +59,17 @@
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
     import {HYP_MANAGER_ROLE} from '../api/constants';
 
+    import LinkTable from '@/layouts/table/LinkTable.vue';
+
     export default {
         name: 'Roles',
         components: {
-            ContainerHeaderApp
+            ContainerHeaderApp, LinkTable
         },
         data() {
             return {
                 title: 'Roles',
                 roles: 0,
-                selected: null,
-                options: [],
                 filter: null,
                 fields: [
                     {
@@ -93,7 +98,7 @@
                         label: 'Nombre',
                         class: 'text-left',
                         sortable: true
-                    },  
+                    },
                     {
                         key: 'alias',
                         label: 'Alias',
@@ -115,12 +120,12 @@
                     {
                         key: 'permissions',
                         label: 'Permisos',
-                        class: 'text-center',
+                        class: 'text-center'
                     },
                     {
                         key: 'users',
                         label: 'Usuarios',
-                        class: 'text-center',
+                        class: 'text-center'
                     },
                     {
                         key: 'actions',
@@ -235,6 +240,17 @@
                 }
                 a{
                     color: #64A5AF;
+                    font-weight: 600;
+                    &.relation {
+                        border: 1px solid #64A5AF;
+                        border-radius: 10px;
+                        padding: 4px 10px;
+                        &:hover {
+                            text-decoration: none;
+                            background-color: #64A5AF;
+                            color: white !important;
+                        }
+                    }
                 }
 
                 i.fas {

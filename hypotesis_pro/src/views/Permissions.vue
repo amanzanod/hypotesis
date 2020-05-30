@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="users" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:num="permissions" v-bind:title="title" v-bind:list="true"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -14,7 +14,8 @@
                   ></b-form-input>
                   <span class="search_input"><i class="fas fa-search"></i></span>
               </div>
-              <b-form-select v-model="selected" :options="options"></b-form-select>
+              <b-form-select v-model="context_selected" :options="context_options"></b-form-select>
+              <b-form-select v-model="role_selected" :options="role_options"></b-form-select>
               <span class="filter_options"><i class="fas fa-filter"></i></span>
           </div>
 
@@ -31,17 +32,20 @@
               <template v-slot:cell(state)="state">
                   <span v-html="state.value"></span>
               </template>
-              <template v-slot:cell(role)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.role }}</router-link>
+              <template v-slot:cell(icon)="icon">
+                  <span v-html="icon.value"></span>
+              </template>
+              <template v-slot:cell(roles)="data">
+                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.roles.length }} roles</router-link>
+              </template>
+              <template v-slot:cell(users)="data">
+                  <LinkTable v-bind:item="data.item"/>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
               <template v-slot:cell(name)="data">
-                  <div class="user-name">
-                      <router-link :to="{ name: 'User', params: { username: data.item.username }}">{{ data.value }}</router-link>
-                      <span class="title">{{ data.item.title }}</span>
-                  </div>
+                  <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">{{ data.value }}</a>
               </template>
           </b-table>
 
@@ -55,19 +59,23 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_MANAGER_USER, HYP_MANAGER_ROLE} from '../api/constants';
+    import {HYP_MANAGER_PERMISSION, HYP_MANAGER_CONTEXT, HYP_MANAGER_ROLE} from '../api/constants';
+
+    import LinkTable from '@/layouts/table/LinkTable.vue';
 
     export default {
-        name: 'Users',
+        name: 'Permissions',
         components: {
-            ContainerHeaderApp
+            ContainerHeaderApp, LinkTable
         },
         data() {
             return {
-                title: 'Usuarios Registrados',
-                users: 0,
-                selected: null,
-                options: [],
+                title: 'Permisos',
+                context_selected: null,
+                context_options: [],
+                role_selected: null,
+                role_options: [],
+                permissions: 0,
                 filter: null,
                 fields: [
                     {
@@ -84,46 +92,38 @@
                         }
                     },
                     {
-                        key: 'role',
-                        label: 'Rol',
+                        key: 'context',
+                        label: 'Contexto',
+                        class: 'text-center',
+                        sortable: true
+                    },
+                    {
+                        key: 'alias',
+                        label: 'Alias',
                         class: 'text-left',
                         sortable: true
                     },
                     {
-                        key: 'name',
-                        label: 'Nombre',
-                        class: 'text-left',
-                        sortable: true,
-                        formatter: (value, key, item) => {
-                            return item.name + ' ' + item.surname1 + ' ' + item.surname2
-                        }
-                    },
-                    {
-                        key: 'email',
-                        label: 'E-mail',
-                        class: 'text-left',
-                    },
-                    {
-                        key: 'username',
-                        label: 'Usuario',
-                        class: 'text-left',
-                        sortable: true
-                    },
-                    {
-                        key: 'country',
-                        label: 'País',
+                        key: 'created_at',
+                        label: 'Creado',
                         class: 'text-left',
                         sortable: true
                     },
                     {
                         key: 'updated_at',
-                        label: 'Último Acceso',
+                        label: 'Actualizado',
                         class: 'text-left',
-                        sortable: true,
-                        formatter: (value) => {
-                            return new Date(value).toLocaleDateString();
-                        }
-
+                        sortable: true
+                    },
+                    {
+                        key: 'roles',
+                        label: 'Roles',
+                        class: 'text-center'
+                    },
+                    {
+                        key: 'users',
+                        label: 'Usuarios',
+                        class: 'text-center'
                     },
                     {
                         key: 'actions',
@@ -151,18 +151,18 @@
         },
         beforeMount () {
             this.axios
-                .get( HYP_MANAGER_USER + '?format=json')
+                .get( HYP_MANAGER_PERMISSION + '?format=json')
                 .then(response => {
                     this.items = response.data;
-                    this.users = response.data.length;
+                    this.permissions = response.data.length;
                 });
             this.axios
-                .get( HYP_MANAGER_ROLE + '?format=json')
+                .get( HYP_MANAGER_CONTEXT + '?format=json')
                 .then(response => {
                     const data = response.data;
                     const options = [
-                        { value: null, text: 'Todos los roles' }
-                        ];
+                        { value: null, text: 'Todos los contextos' }
+                    ];
 
                     data.forEach(element => {
                         let option = {
@@ -173,7 +173,26 @@
                         options.push(option);
                     });
 
-                    this.options = options;
+                    this.context_options = options;
+                });
+            this.axios
+                .get( HYP_MANAGER_ROLE + '?format=json')
+                .then(response => {
+                    const data = response.data;
+                    const options = [
+                        { value: null, text: 'Todos los roles' }
+                    ];
+
+                    data.forEach(element => {
+                        let option = {
+                            value: element.alias,
+                            text: element.name,
+                            disabled: element.state !== 'active'
+                        };
+                        options.push(option);
+                    });
+
+                    this.role_options = options;
                 });
         },
         methods: {
@@ -272,6 +291,7 @@
 
                 i.fas {
                     font-size: 20px;
+                    color: #727475;
                     &.fa-check-circle {
                         color: #28BB72;
                     }

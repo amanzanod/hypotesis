@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="users" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -14,7 +14,6 @@
                   ></b-form-input>
                   <span class="search_input"><i class="fas fa-search"></i></span>
               </div>
-              <b-form-select v-model="selected" :options="options"></b-form-select>
               <span class="filter_options"><i class="fas fa-filter"></i></span>
           </div>
 
@@ -31,17 +30,20 @@
               <template v-slot:cell(state)="state">
                   <span v-html="state.value"></span>
               </template>
-              <template v-slot:cell(role)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.role }}</router-link>
+              <template v-slot:cell(icon)="icon">
+                  <span v-html="icon.value"></span>
+              </template>
+              <template v-slot:cell(roles)="data">
+                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.permissions.length }} permisos</router-link>
+              </template>
+              <template v-slot:cell(users)="data">
+                  <router-link class="relation" to="data">Matricular en {{data.item.name}}</router-link>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
               <template v-slot:cell(name)="data">
-                  <div class="user-name">
-                      <router-link :to="{ name: 'User', params: { username: data.item.username }}">{{ data.value }}</router-link>
-                      <span class="title">{{ data.item.title }}</span>
-                  </div>
+                  <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">{{ data.value }}</a>
               </template>
           </b-table>
 
@@ -55,19 +57,17 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_MANAGER_USER, HYP_MANAGER_ROLE} from '../api/constants';
+    import {HYP_MANAGER_GRADE} from '../api/constants';
 
     export default {
-        name: 'Users',
+        name: 'Masters',
         components: {
             ContainerHeaderApp
         },
         data() {
             return {
-                title: 'Usuarios Registrados',
-                users: 0,
-                selected: null,
-                options: [],
+                title: 'Másters',
+                contexts: 0,
                 filter: null,
                 fields: [
                     {
@@ -84,63 +84,44 @@
                         }
                     },
                     {
-                        key: 'role',
-                        label: 'Rol',
-                        class: 'text-left',
-                        sortable: true
-                    },
-                    {
                         key: 'name',
-                        label: 'Nombre',
-                        class: 'text-left',
-                        sortable: true,
-                        formatter: (value, key, item) => {
-                            return item.name + ' ' + item.surname1 + ' ' + item.surname2
-                        }
-                    },
-                    {
-                        key: 'email',
-                        label: 'E-mail',
-                        class: 'text-left',
-                    },
-                    {
-                        key: 'username',
-                        label: 'Usuario',
+                        label: 'nombre',
                         class: 'text-left',
                         sortable: true
                     },
                     {
-                        key: 'country',
-                        label: 'País',
+                        key: 'alias',
+                        label: 'Alias',
+                        class: 'text-left',
+                        sortable: true
+                    },
+                    {
+                        key: 'created_at',
+                        label: 'Creado',
                         class: 'text-left',
                         sortable: true
                     },
                     {
                         key: 'updated_at',
-                        label: 'Último Acceso',
+                        label: 'Actualizado',
                         class: 'text-left',
-                        sortable: true,
-                        formatter: (value) => {
-                            return new Date(value).toLocaleDateString();
-                        }
-
+                        sortable: true
+                    },
+                    {
+                        key: 'category',
+                        label: 'Categoría',
+                        class: 'text-center'
+                    },
+                    {
+                        key: 'users',
+                        label: 'Usuarios',
+                        class: 'text-center'
                     },
                     {
                         key: 'actions',
                         label: 'Acciones',
                         formatter: (value, key, item) => {
                             let html = ``;
-                            if (item.is_visible === true) {
-                                html += `<b-button v-b-tooltip.hover href="/${item.username}" title="Visible">
-                                            <i class="fas fa-eye"></i>
-                                         </b-button>`;
-                            } else {
-                                html += `<b-button v-b-tooltip.hover href="/${item.username}" title="No Visible">
-                                            <i class="fas fa-eye-slash"></i>
-                                         </b-button>`;
-                            }
-
-                            html += `<a href="/${item.username}"><i class="fas fa-trash-alt"></i></a>`;
                             html += `<a href="/${item.username}"><i class="fas fa-cog"></i></a>`;
                             return html;
                         }
@@ -151,30 +132,12 @@
         },
         beforeMount () {
             this.axios
-                .get( HYP_MANAGER_USER + '?format=json')
+                .get( HYP_MANAGER_GRADE + '?format=json')
                 .then(response => {
                     this.items = response.data;
-                    this.users = response.data.length;
+                    this.contexts = response.data.length;
                 });
-            this.axios
-                .get( HYP_MANAGER_ROLE + '?format=json')
-                .then(response => {
-                    const data = response.data;
-                    const options = [
-                        { value: null, text: 'Todos los roles' }
-                        ];
 
-                    data.forEach(element => {
-                        let option = {
-                            value: element.alias,
-                            text: element.name,
-                            disabled: element.state !== 'active'
-                        };
-                        options.push(option);
-                    });
-
-                    this.options = options;
-                });
         },
         methods: {
             rowClass(item, type) {
@@ -272,6 +235,7 @@
 
                 i.fas {
                     font-size: 20px;
+                    color: #727475;
                     &.fa-check-circle {
                         color: #28BB72;
                     }
