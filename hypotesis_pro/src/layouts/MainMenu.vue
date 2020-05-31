@@ -29,7 +29,7 @@
                         </router-link>
                     </li>
                     <li class="menu_button">
-                        <router-link :to="{ name: 'Context'}">
+                        <router-link :to="{ name: 'Contexts'}">
                             <i class="fas fa-globe"></i>
                             <span class="button_text">Contextos</span>
                         </router-link>
@@ -133,7 +133,7 @@
                     this.name = data.name;
                     this.surname1 = data.surname1;
                     this.username = data.username;
-                    this.role = data.role;
+                    this.role = data.role.name;
                 })
         }
     }

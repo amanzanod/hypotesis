@@ -1,10 +1,10 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="role" v-bind:title="title" v-bind:list="false"/>
+      <ContainerHeaderApp v-bind:subtitle="role" v-bind:title="title" v-bind:list="false"/>
       <div class="container-view">
 
-          <b-form @submit="onSubmit" @reset="onReset" v-if="show" class="hyp-form">
+          <b-form @submit="onSubmit" v-if="show" class="hyp-form">
 
               <b-form-group id="input-group-1" label="Nombre:" label-for="input-1" class="hyp-group">
                   <b-form-input
@@ -68,7 +68,7 @@
               <b-form-group id="input-group-7" label="Rol:" label-for="input-7" class="hyp-group">
                   <b-form-select
                           id="input-7"
-                          v-model="form.role"
+                          v-model="form.role_id"
                           :options="roles"
                           required
                   ></b-form-select>
@@ -87,7 +87,7 @@
               <b-form-group id="input-group-9" label="Código Postal:" label-for="input-9" class="hyp-group">
                   <b-form-input
                           id="input-9"
-                          v-model="form.postalcode"
+                          v-model="form.postal_code"
                           type="text"
                           required
                           placeholder="Código Postal"
@@ -107,17 +107,17 @@
               <b-form-group id="input-group-11" label="Provincia:" label-for="input-11" class="hyp-group">
                   <b-form-select
                           id="input-11"
-                          v-model="form.province"
+                          v-model="form.province_id"
                           :options="provinces"
                           required
                   ></b-form-select>
               </b-form-group>
 
 
-              <b-form-group id="input-group-12" label="Descripción:" label-for="input-12" class="hyp-group">
+              <b-form-group id="input-group-12" label="Acerca de mí:" label-for="input-12" class="hyp-group">
                   <b-form-textarea
                           id="input-12"
-                          v-model="form.description"
+                          v-model="form.about_me"
                           placeholder="Escriba una descripción personal..."
                   ></b-form-textarea>
               </b-form-group>
@@ -136,14 +136,15 @@
               <b-form-group id="input-group-14" label="Idioma:" label-for="input-14" class="hyp-group">
                   <b-form-select
                           id="input-14"
-                          v-model="form.language"
+                          v-model="form.language_id"
                           :options="languages"
                           required
                   ></b-form-select>
               </b-form-group>
 
-              <b-button type="submit" variant="primary">Crear</b-button>
-              <b-button type="reset" variant="danger">Limpiar</b-button>
+              <div class="action_buttons">
+                  <b-button type="submit" variant="primary" class="hyp_submit">Crear</b-button>
+              </div>
           </b-form>
 
       </div>
@@ -154,7 +155,13 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_MANAGER_USER, HYP_MANAGER_ROLE} from '../api/constants';
+    import {
+        HYP_MANAGER_USER,
+        HYP_MANAGER_ROLE,
+        HYP_MANAGER_PROVINCE,
+        HYP_MANAGER_LANGUAGE,
+        HYP_MANAGER_CREATE_USER
+    } from '../api/constants';
 
     export default {
         name: 'User',
@@ -166,6 +173,8 @@
                 title: 'Usuario',
                 role: '',
                 roles: [],
+                provinces: [],
+                languages: [],
                 form: {
                     name: '',
                     surname1: '',
@@ -173,41 +182,41 @@
                     username: '',
                     password: '',
                     email: '',
-                    role: null,
+                    role_id: null,
                     address: '',
-                    postalcode: '',
+                    postal_code: '',
                     city: '',
-                    province: null,
-                    description: '',
+                    province_id: null,
+                    country_id: 'ES',
+                    state_id: 'active',
+                    about_me: '',
                     picture: null,
-                    language: null,
+                    language_id: null,
                 },
                 show: true
             }
         },
-        created () {
-            console.log(this.$route.query)
-        },
         beforeMount () {
             this.axios
-                .get( HYP_MANAGER_USER + this.$route.params.username + '/?format=json')
+                .get(HYP_MANAGER_USER + this.$route.params.username + '/?format=json')
                 .then(response => {
                     const data = response.data;
                     this.title = data.name + ' ' + data.surname1 + ' ' + data.surname2;
-                    this.role = data.role;
+                    this.role = data.role.name;
                     this.form.name = data.name;
                     this.form.surname1 = data.surname1;
                     this.form.surname2 = data.surname2;
                     this.form.username = data.username;
+                    this.form.password = '*******';
                     this.form.email = data.email;
-                    //this.form.role = data.role;
+                    this.form.role_id = data.role.alias;
                     this.form.address = data.address;
-                    this.form.postalcode = data.postalcode;
+                    this.form.postal_code = data.postal_code;
                     this.form.city = data.city;
-                    //this.form.province = data.province;
-                    this.form.description = data.description;
-                    //this.form.picture = data.picture;
-                    //this.form.language = data.language;
+                    this.form.province_id = data.province.code;
+                    this.form.about_me = data.about_me;
+                    this.form.picture = data.picture;
+                    this.form.language_id = data.language.code;
                 });
             this.axios
                 .get( HYP_MANAGER_ROLE + '?format=json')
@@ -228,24 +237,54 @@
 
                     this.roles = options;
                 });
+            this.axios
+                .get( HYP_MANAGER_PROVINCE + '?format=json')
+                .then(response => {
+                    const data = response.data;
+                    const options = [
+                        { value: null, text: 'Selecciona la provincia' }
+                    ];
+
+                    data.forEach(element => {
+                        let option = {
+                            value: element.code,
+                            text: element.name,
+                        };
+                        options.push(option);
+                    });
+
+                    this.provinces = options;
+                });
+            this.axios
+                .get( HYP_MANAGER_LANGUAGE + '?format=json')
+                .then(response => {
+                    const data = response.data;
+                    const options = [
+                        { value: null, text: 'Seleccione el idioma' }
+                    ];
+
+                    data.forEach(element => {
+                        let option = {
+                            value: element.code,
+                            text: element.name,
+                        };
+                        options.push(option);
+                    });
+
+                    this.languages = options;
+                });
         },
         methods: {
             onSubmit(evt) {
                 evt.preventDefault();
-                alert(JSON.stringify(this.form))
-            },
-            onReset(evt) {
-                evt.preventDefault();
-                // Reset our form values
-                this.form.email = '';
-                this.form.name = '';
-                this.form.food = null;
-                this.form.checked = [];
-                // Trick to reset/clear native browser form validation state
-                this.show = false;
-                this.$nextTick(() => {
-                    this.show = true
-                })
+                this.axios
+                    .post(HYP_MANAGER_CREATE_USER, this.form)
+                    .then(response => {
+                        alert(JSON.stringify(response));
+                    })
+                    .catch(error => {
+                        alert(JSON.stringify(error));
+                    });
             }
         }
     }
@@ -282,6 +321,9 @@
                             color: #b9b9b9;
                         }
                     }
+                    textarea {
+                        padding-top: 11px;
+                    }
                     label.custom-file-label {
                         font-size: 15px;
                         color: #b9b9b9;
@@ -290,6 +332,19 @@
                 }
                 #input-group-8 {
                     width: 980px;
+                }
+                .action_buttons {
+                    display: flex;
+                    width: 100%;
+                    justify-content: flex-end;
+                    padding: 27px;
+                    > button.hyp_submit {
+                        background-color: #64a5af;
+                        border: none;
+                        &:hover {
+                            background-color: #7dcad6;
+                        }
+                    }
                 }
             }
         }

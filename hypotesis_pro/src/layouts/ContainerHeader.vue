@@ -1,7 +1,7 @@
 <template>
 
     <div class="container-header">
-        <h1 class="title_container">{{ title }} <span>({{ num }})</span></h1>
+        <h1 class="title_container">{{ title }} <span>({{ subtitle }})</span></h1>
         <router-link v-if="list" to="Users" class="create_entity">
             <i class="fas fa-plus"></i>
             <div class="triangle-form"></div>
@@ -14,7 +14,7 @@
     export default {
         name: 'ContainerHeader',
         props: {
-            num: String,
+            subtitle: String,
             title: String,
             list: Boolean
         }

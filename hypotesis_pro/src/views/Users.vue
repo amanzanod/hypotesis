@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="users" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:subtitle="users" v-bind:title="title" v-bind:list="true"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -32,7 +32,7 @@
                   <span v-html="state.value"></span>
               </template>
               <template v-slot:cell(role)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.role }}</router-link>
+                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.role.name }}</router-link>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
@@ -65,7 +65,7 @@
         data() {
             return {
                 title: 'Usuarios Registrados',
-                users: 0,
+                users: '0',
                 selected: null,
                 options: [],
                 filter: null,
@@ -73,9 +73,10 @@
                     {
                         key: 'state',
                         label: 'Estado',
+                        class: 'text-center',
                         sortable: true,
                         formatter: (value) => {
-                            switch (value) {
+                            switch (value.alias) {
                                 case 'active':
                                     return `<i class="fas fa-check-circle"></i>`;
                                 case 'unactive':
@@ -113,7 +114,10 @@
                         key: 'country',
                         label: 'País',
                         class: 'text-left',
-                        sortable: true
+                        sortable: true,
+                        formatter: (value) => {
+                            return value.name
+                        }
                     },
                     {
                         key: 'updated_at',
@@ -154,7 +158,7 @@
                 .get( HYP_MANAGER_USER + '?format=json')
                 .then(response => {
                     this.items = response.data;
-                    this.users = response.data.length;
+                    this.users = response.data.length + '';
                 });
             this.axios
                 .get( HYP_MANAGER_ROLE + '?format=json')

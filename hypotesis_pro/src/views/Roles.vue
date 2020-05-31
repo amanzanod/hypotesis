@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="roles" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:subtitle="roles" v-bind:title="title" v-bind:list="true"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -69,7 +69,7 @@
         data() {
             return {
                 title: 'Roles',
-                roles: 0,
+                roles: '0',
                 filter: null,
                 fields: [
                     {
@@ -156,7 +156,7 @@
                 .get( HYP_MANAGER_ROLE + '?format=json')
                 .then(response => {
                     this.items = response.data;
-                    this.roles = response.data.length;
+                    this.roles = response.data.length + '';
                 });
         },
         methods: {

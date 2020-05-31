@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="permissions" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:subtitle="permissions" v-bind:title="title" v-bind:list="true"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -75,7 +75,7 @@
                 context_options: [],
                 role_selected: null,
                 role_options: [],
-                permissions: 0,
+                permissions: '0',
                 filter: null,
                 fields: [
                     {
@@ -154,7 +154,7 @@
                 .get( HYP_MANAGER_PERMISSION + '?format=json')
                 .then(response => {
                     this.items = response.data;
-                    this.permissions = response.data.length;
+                    this.permissions = response.data.length + '';
                 });
             this.axios
                 .get( HYP_MANAGER_CONTEXT + '?format=json')

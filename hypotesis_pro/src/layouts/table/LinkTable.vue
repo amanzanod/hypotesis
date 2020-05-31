@@ -11,9 +11,13 @@
     export default {
         name: 'LinkTable',
         props: {
-            num: Number,
             href: String,
             item: Object
+        },
+        data() {
+            return {
+                num: '0'
+            }
         },
         beforeMount () {
 
