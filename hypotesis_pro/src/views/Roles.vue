@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:subtitle="roles" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:subtitle="roles" v-bind:title="title" v-bind:list="true" v-bind:create_href="create_href"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -70,6 +70,7 @@
             return {
                 title: 'Roles',
                 roles: '0',
+                create_href: '/role/_new',
                 filter: null,
                 fields: [
                     {
@@ -77,7 +78,7 @@
                         label: 'Estado',
                         sortable: true,
                         formatter: (value) => {
-                            switch (value) {
+                            switch (value.alias) {
                                 case 'active':
                                     return `<i class="fas fa-check-circle"></i>`;
                                 case 'unactive':
@@ -234,6 +235,10 @@
         }
         tbody {
             tr {
+                td {
+                    vertical-align: middle;
+                    padding: 10px;
+                }
                 border: 1px solid #DFDFDF;
                 &:nth-of-type(odd) {
                     background-color: rgba(0, 0, 0, 0.02);

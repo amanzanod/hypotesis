@@ -1,8 +1,8 @@
 <template>
 
     <div class="container-header">
-        <h1 class="title_container">{{ title }} <span>({{ subtitle }})</span></h1>
-        <router-link v-if="list" to="Users" class="create_entity">
+        <h1 class="title_container">{{ title }} <span v-if="subtitle">({{ subtitle }})</span></h1>
+        <router-link v-if="list" :to="create_href" class="create_entity">
             <i class="fas fa-plus"></i>
             <div class="triangle-form"></div>
         </router-link>
@@ -16,7 +16,8 @@
         props: {
             subtitle: String,
             title: String,
-            list: Boolean
+            list: Boolean,
+            create_href: String
         }
     }
 
@@ -32,6 +33,7 @@
         display: flex;
         align-items: center;
         padding: 0 50px;
+        position: relative;
         h1.title_container {
             font-family: 'Montserrat', sans-serif;
             font-size: 25px;
@@ -52,7 +54,7 @@
             justify-content: center;
             border-radius: 10px 0 0 10px;
             font-size: 20px;
-            right: 27px;
+            right: -12px;
             padding: 0 0 0 8px;
             &:hover {
                 text-decoration: none;

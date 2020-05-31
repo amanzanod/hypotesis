@@ -20,7 +20,8 @@ services:
     image: hypotesis_pro:latest
     working_dir: ${HYP_PRO_WORKDIR_BUILD}
     environment:
-      NODE_ENV: production
+      - NODE_ENV=production
+      - HYP_MANAGER_URL=${HYP_MANAGER_SERVER}:${HYP_MANAGER_PORT}
     env_file:
       - hypotesis_pro/.env
     ports:

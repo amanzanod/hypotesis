@@ -132,7 +132,7 @@
                           placeholder="Selecciona una imagen o arrastrala aquí..."
                           drop-placeholder="Arrastra aquí..."
                   ></b-form-file>
-                  <b-img v-if="imageSrc" :src="imageSrc" class="preview" fluid block rounded></b-img>
+                  <b-img v-if="hasImage" :src="imageSrc" class="preview" fluid block rounded></b-img>
                   <div class="no_image" v-else><i class="fas fa-camera-retro"></i></div>
               </b-form-group>
 
@@ -175,17 +175,16 @@
         });
 
     export default {
-        name: 'User',
+        name: 'Role',
         components: {
             ContainerHeaderApp
         },
         data() {
             return {
-                username: null,
                 image: null,
                 imageSrc: null,
                 is_new: true,
-                title: 'Usuario',
+                title: 'Rol',
                 role: '',
                 roles: [],
                 provinces: [],
@@ -212,37 +211,28 @@
             }
         },
         beforeMount () {
-            this.username = this.$route.params.username;
-            this.is_new = this.username === '_new';
-
-            this.username = this.is_new ? null : this.username;
-
-            if (!this.is_new) {
-                this.axios
-                    .get(HYP_MANAGER_USER + this.username + '/?format=json')
-                    .then(response => {
-                        const data = response.data;
-                        this.title = data.name + ' ' + data.surname1 + ' ' + data.surname2;
-                        this.role = data.role.name;
-                        this.form.name = data.name;
-                        this.form.surname1 = data.surname1;
-                        this.form.surname2 = data.surname2;
-                        this.form.username = data.username;
-                        this.form.password = '*******';
-                        this.form.email = data.email;
-                        this.form.role_id = data.role.alias;
-                        this.form.address = data.address;
-                        this.form.postal_code = data.postal_code;
-                        this.form.city = data.city;
-                        this.form.province_id = data.province.code;
-                        this.form.about_me = data.about_me;
-                        this.imageSrc = data.picture;
-                        this.form.language_id = data.language.code;
-                    });
-            } else {
-                this.title = 'Crear Usuario';
-            }
-
+            this.is_new = !this.$route.params.username;
+            this.axios
+                .get(HYP_MANAGER_USER + this.$route.params.username + '/?format=json')
+                .then(response => {
+                    const data = response.data;
+                    this.title = data.name + ' ' + data.surname1 + ' ' + data.surname2;
+                    this.role = data.role.name;
+                    this.form.name = data.name;
+                    this.form.surname1 = data.surname1;
+                    this.form.surname2 = data.surname2;
+                    this.form.username = data.username;
+                    this.form.password = '*******';
+                    this.form.email = data.email;
+                    this.form.role_id = data.role.alias;
+                    this.form.address = data.address;
+                    this.form.postal_code = data.postal_code;
+                    this.form.city = data.city;
+                    this.form.province_id = data.province.code;
+                    this.form.about_me = data.about_me;
+                    //this.form.picture = data.picture;
+                    this.form.language_id = data.language.code;
+                });
             this.axios
                 .get( HYP_MANAGER_ROLE + '?format=json')
                 .then(response => {
@@ -255,7 +245,7 @@
                         let option = {
                             value: element.alias,
                             text: element.name,
-                            disabled: element.state.alias !== 'active'
+                            disabled: element.state !== 'active'
                         };
                         options.push(option);
                     });
@@ -335,14 +325,30 @@
                         });
                 } else {
                     this.form.picture = this.image;
-                    this.axios
-                        .put(HYP_MANAGER_USER + this.username + '/', this.form)
-                        .then(response => {
-                            alert(JSON.stringify(response));
-                        })
-                        .catch(error => {
-                            alert(JSON.stringify(error));
-                        });
+
+
+                    var formdata = new FormData();
+                    formdata.append("name", "Juanito");
+                    formdata.append("password", "dsfsf");
+                    formdata.append("surname1", "test");
+                    formdata.append("email", "hola@com.com");
+                    formdata.append("state_id", "active");
+                    formdata.append("province_id", "28");
+                    formdata.append("country_id", "ES");
+                    formdata.append("language_id", "es");
+                    formdata.append("role_id", "student");
+                    formdata.append("picture", this.image, "/C:/Users/antonio/Desktop/Personal/marcos_samu_pjmask.jpg");
+
+                    var requestOptions = {
+                        method: 'PUT',
+                        body: formdata,
+                        redirect: 'follow'
+                    };
+
+                    fetch("http://127.0.0.1:8000/api/user/test/", requestOptions)
+                        .then(response => response.text())
+                        .then(result => console.log(result))
+                        .catch(error => console.log('error', error));
                 }
 
             }

@@ -24,16 +24,17 @@ SECRET_KEY = '1f06@p!wdzy_8=+awduj4l11i556zb_in9j35@ofyq+(a&4m&$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.environ.get('HYP_LOCAL_IP', ''), 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [os.environ.get('HYP_LOCAL_IP', ''), 'localhost']
 
 
 # CORS
 
-from corsheaders.defaults import default_headers
+CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ALLOW_HEADERS = default_headers + (
-    'Access-Control-Allow-Origin',
-)
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:8080",
+    "http://192.168.99.100"
+]
 
 # Application definition
 
@@ -90,10 +91,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hypotesis_manager',
         'USER': 'hypotesis',
-        'PASSWORD': '1234',
-        'HOST': '192.168.99.100',
-        'PORT': '3306',
-    },
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', ''),
+        'HOST': os.environ.get('HYP_DB_IP', ''),
+        'PORT': os.environ.get('HYP_DB_PORT', ''),
+    }
 }
 
 # Password validation
@@ -134,4 +135,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-CORS_ORIGIN_WHITELIST = "http://localhost:8080",
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

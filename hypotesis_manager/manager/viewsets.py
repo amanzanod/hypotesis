@@ -46,6 +46,41 @@ class UserViewSet(viewsets.ModelViewSet):
                 'errors': serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
+    # Update.
+    def update(self, request, pk=None):
+        try:
+            data = request.data
+            object_model = UserManager.objects.get(pk=pk)
+            object_model.name = data['name'] if 'name' in data else object_model.name
+            object_model.password = data['password'] if 'password' in data else object_model.password
+            object_model.surname1 = data['surname1'] if 'surname1' in data else object_model.surname1
+            object_model.surname2 = data['surname2'] if 'surname2' in data else object_model.surname2
+            object_model.address = data['address'] if 'address' in data else object_model.address
+            object_model.postal_code = data['postal_code'] if 'postal_code' in data else object_model.postal_code
+            object_model.city = data['city'] if 'city' in data else object_model.city
+            object_model.about_me = data['about_me'] if 'about_me' in data else object_model.about_me
+            object_model.title = data['title'] if 'title' in data else object_model.title
+            object_model.state_id = data['state_id'] if 'state_id' in data else object_model.state_id
+            object_model.state_at = timezone.now() if 'state_id' in data else object_model.state_at
+            object_model.is_visible = data['is_visible'] if 'is_visible' in data else object_model.is_visible
+            object_model.visible_at = timezone.now() if 'is_visible' in data else object_model.visible_at
+            object_model.province_id = data['province_id'] if 'province_id' in data else object_model.province_id
+            object_model.country_id = data['country_id'] if 'country_id' in data else object_model.country_id
+            object_model.language_id = data['language_id'] if 'language_id' in data else object_model.language_id
+            object_model.role_id = data['role_id'] if 'role_id' in data else object_model.role_id
+            object_model.picture = request.FILES['picture'] if 'picture' in request.FILES else object_model.picture
+            object_model.token = data['token'] if 'token' in data else object_model.token
+            object_model.save()
+            return Response({
+                'success': True,
+                'data': object_model.username
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                'success': False,
+                'errors': str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
+
 
 # Context ViewSet.
 class ContextViewSet(viewsets.ModelViewSet):

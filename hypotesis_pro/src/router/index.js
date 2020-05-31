@@ -31,6 +31,13 @@ Vue.use(VueRouter);
       component: () => import('../views/Roles.vue')
   },
   {
+      path: '/roles/:alias',
+      name: 'Role',
+      meta: 'Rol',
+      component: () => import('../views/Role.vue'),
+      props: true
+  },
+  {
       path: '/permissions',
       name: 'Permissions',
       meta: 'Permisos',

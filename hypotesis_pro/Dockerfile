@@ -13,6 +13,9 @@ FROM nginx:1.13.12-alpine as production-stage
 COPY --from=build-stage /app/dist /var/www/html
 # Hacer que todos los archivos pertenezcan al usuario nginx
 RUN chown -R nginx:nginx /var/www/html
+
+ENV HYP_MANAGER_URL $HYP_MANAGER_URL
+
 # Abrir el puerto 80 del contenedor
 EXPOSE 80
 # Iniciar el servidor Nginx

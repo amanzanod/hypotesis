@@ -270,6 +270,10 @@
         }
         tbody {
             tr {
+                td {
+                    vertical-align: middle;
+                    padding: 10px;
+                }
                 border: 1px solid #DFDFDF;
                 &:nth-of-type(odd) {
                     background-color: rgba(0, 0, 0, 0.02);

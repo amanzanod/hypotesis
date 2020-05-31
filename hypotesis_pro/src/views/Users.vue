@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:subtitle="users" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:subtitle="users" v-bind:title="title" v-bind:list="true" v-bind:create_href="create_href"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -32,15 +32,20 @@
                   <span v-html="state.value"></span>
               </template>
               <template v-slot:cell(role)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.role.name }}</router-link>
+                  <router-link class="relation" :to="{ name: 'Role', params: { alias: data.item.role.alias }}">{{ data.item.role.name }}</router-link>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
               <template v-slot:cell(name)="data">
                   <div class="user-name">
-                      <router-link :to="{ name: 'User', params: { username: data.item.username }}">{{ data.value }}</router-link>
-                      <span class="title">{{ data.item.title }}</span>
+                      <div class="picture_mini">
+                        <b-img :src="data.item.picture"></b-img>
+                      </div>
+                      <div class="data">
+                          <router-link class="fullname" :to="{ name: 'User', params: { username: data.item.username }}">{{ data.value }}</router-link>
+                          <span class="title">{{ data.item.title }}</span>
+                      </div>
                   </div>
               </template>
           </b-table>
@@ -66,6 +71,7 @@
             return {
                 title: 'Usuarios Registrados',
                 users: '0',
+                create_href: '/users/_new',
                 selected: null,
                 options: [],
                 filter: null,
@@ -73,7 +79,7 @@
                     {
                         key: 'state',
                         label: 'Estado',
-                        class: 'text-center',
+                        class: ['text-center', 'vertical-align'],
                         sortable: true,
                         formatter: (value) => {
                             switch (value.alias) {
@@ -255,6 +261,10 @@
         }
         tbody {
             tr {
+                td {
+                    vertical-align: middle;
+                    padding: 6px;
+                }
                 border: 1px solid #DFDFDF;
                 &:nth-of-type(odd) {
                     background-color: rgba(0, 0, 0, 0.02);
@@ -270,6 +280,33 @@
                             text-decoration: none;
                             background-color: #64A5AF;
                             color: white !important;
+                        }
+                    }
+                }
+
+                .user-name {
+                    display: flex;
+                    flex-direction: row;
+                    .picture_mini {
+                        width: 36px;
+                        height: 36px;
+                        margin-right: 7px;
+                        border-radius: 18px;
+                        overflow: hidden;
+                        >img {
+                            width: 36px;
+                        }
+                    }
+                    .data {
+                        display: flex;
+                        flex-direction: column;
+                        .fullname {
+
+                        }
+                        span.title {
+                            font-size: 13px;
+                            line-height: 8px;
+                            color: #638f96;
                         }
                     }
                 }
