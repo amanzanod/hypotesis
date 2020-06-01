@@ -32,6 +32,9 @@
               <template v-slot:cell(state)="state">
                   <span v-html="state.value"></span>
               </template>
+              <template v-slot:cell(context)="data">
+                  <router-link class="relation" :to="{ name: 'Courses'}">{{ data.item.context.name }}</router-link>
+              </template>
               <template v-slot:cell(icon)="icon">
                   <span v-html="icon.value"></span>
               </template>
@@ -83,7 +86,7 @@
                         label: 'Estado',
                         sortable: true,
                         formatter: (value) => {
-                            switch (value) {
+                            switch (value.alias) {
                                 case 'active':
                                     return `<i class="fas fa-check-circle"></i>`;
                                 case 'unactive':

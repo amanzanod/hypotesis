@@ -113,7 +113,7 @@ class Migration(migrations.Migration):
                 ('tech_tags', models.CharField(blank=True, max_length=200, null=True, verbose_name='tech tags')),
                 ('start_at', models.DateTimeField(default=django.utils.timezone.now, verbose_name='start at')),
                 ('end_at', models.DateTimeField(default=django.utils.timezone.now, verbose_name='end at')),
-                ('teacher_main', models.IntegerField(blank=True, null=True, verbose_name='teacher main')),
+                ('teacher_main', models.CharField(blank=True, max_length=200, null=True, verbose_name='teacher main')),
 
                 ('format', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='context.Format', verbose_name='format')),
                 ('language', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='context.Language', verbose_name='language')),

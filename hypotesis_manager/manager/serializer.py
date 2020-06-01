@@ -55,6 +55,8 @@ class PermissionSerializer(serializers.ModelSerializer):
     context = ContextSerializer(many=False, read_only=True)
     context_id = serializers.PrimaryKeyRelatedField(write_only=True,
                                                     queryset=Context.objects.all(), source='context')
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
+    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
 
     class Meta:
         model = Permission
@@ -93,7 +95,8 @@ class PermissionRoleSerializer(serializers.ModelSerializer):
     permission = PermissionSerializer(many=False, read_only=True)
     permission_id = serializers.PrimaryKeyRelatedField(write_only=True,
                                                        queryset=Permission.objects.all(), source='permission')
-
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
+    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
 
     class Meta:
         model = PermissionRole

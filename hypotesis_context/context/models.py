@@ -149,7 +149,7 @@ class Context(BaseModel):
     # Relations fields.
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True,
                                blank=True, to_field='alias', verbose_name=_('parent'))
-    teacher_main = models.IntegerField(null=True, blank=True, verbose_name=_('teacher main'))
+    teacher_main = models.CharField(max_length=200, null=True, blank=True, verbose_name=_('teacher main'))
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True, to_field='alias',
                                  verbose_name=_('category'))
 

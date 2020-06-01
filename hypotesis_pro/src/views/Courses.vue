@@ -36,8 +36,11 @@
               <template v-slot:cell(roles)="data">
                   <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.permissions.length }} permisos</router-link>
               </template>
-              <template v-slot:cell(users)="data">
-                  <router-link class="relation" to="data">Matricular en {{data.item.name}}</router-link>
+              <template v-slot:cell(category)="value">
+                  <router-link class="relation" to="data">{{value.item.category.name}}</router-link>
+              </template>
+              <template v-slot:cell(users)="item">
+                  <router-link class="relation" to="data">Matricular {{item.alias}}</router-link>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
@@ -57,7 +60,7 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_MANAGER_GRADE} from '../api/constants';
+    import {HYP_MANAGER_COURSE} from '../api/constants';
 
     export default {
         name: 'Courses',
@@ -75,7 +78,7 @@
                         label: 'Estado',
                         sortable: true,
                         formatter: (value) => {
-                            switch (value) {
+                            switch (value.alias) {
                                 case 'active':
                                     return `<i class="fas fa-check-circle"></i>`;
                                 case 'unactive':
@@ -132,10 +135,11 @@
         },
         beforeMount () {
             this.axios
-                .get( HYP_MANAGER_GRADE + '?format=json')
+                .get( HYP_MANAGER_COURSE + '?format=json')
                 .then(response => {
                     this.items = response.data;
                     this.contexts = response.data.length;
+                    console.log(response.data);
                 });
 
         },
