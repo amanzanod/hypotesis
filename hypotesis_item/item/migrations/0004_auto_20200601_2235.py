@@ -86,7 +86,7 @@ def add_items(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('item', '0003_auto_20200601_2116'),
+        ('item', '0003_auto_20200601_2235'),
     ]
 
     operations = [

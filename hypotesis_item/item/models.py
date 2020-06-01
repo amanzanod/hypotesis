@@ -122,6 +122,7 @@ class Section(BaseModel):
     course = models.CharField(max_length=100, verbose_name=_('course'))
     order = models.IntegerField(verbose_name=_('order'))
     is_visible = models.BooleanField(default=False, null=False, verbose_name=_('is visible'))
+    picture = models.ImageField(null=True, blank=True, verbose_name=_('picture'))
 
     # Format str.
     def __str__(self):
@@ -160,11 +161,15 @@ class Item(BaseModel):
     order = models.IntegerField(null=False, verbose_name=_('order'))
     # Relations fields.
     section = models.ForeignKey(Section, on_delete=models.SET_NULL, null=True,
-                                blank=True, to_field='alias', verbose_name=_('section'))
+                                blank=True, verbose_name=_('section'))
 
     # Class Meta.
     class Meta:
         unique_together = ('section', 'order',)
         verbose_name = _('Item')
         verbose_name_plural = _('Items')
+
+    # Format str.
+    def __str__(self):
+        return self.name
 
