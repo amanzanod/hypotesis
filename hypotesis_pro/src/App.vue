@@ -1,8 +1,12 @@
 <template>
 
   <div id="app">
-    <MainMenuApp/>
-    <div id="main_container">
+    <div v-if="$route.path.includes('/login')">
+      <router-view/>
+    </div>
+    <MainMenuApp v-else />
+    <div v-if="$route.path.includes('/login')"></div>
+    <div id="main_container" v-else>
       <HeaderApp/>
       <ContentApp/>
       <FooterApp/>

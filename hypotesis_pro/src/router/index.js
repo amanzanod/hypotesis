@@ -6,6 +6,12 @@ Vue.use(VueRouter);
 
   const routes = [
   {
+      path: '/login',
+      name: 'Login',
+      component: () => import('../views/Login.vue'),
+      meta: 'Iniciar sesión'
+  },
+  {
       path: '/',
       name: 'Home',
       component: Users,
@@ -31,6 +37,12 @@ Vue.use(VueRouter);
       component: () => import('../views/Roles.vue')
   },
   {
+      path: '/assign_permissions',
+      name: 'AssignPermissions',
+      meta: 'Asignar Permisos',
+      component: () => import('../views/AssignPermissions.vue')
+  },
+  {
       path: '/roles/:alias',
       name: 'Role',
       meta: 'Rol',
@@ -38,10 +50,31 @@ Vue.use(VueRouter);
       props: true
   },
   {
+      path: '/roles/:alias/permissions',
+      name: 'RolePermissions',
+      meta: 'Permisos de Rol',
+      component: () => import('../views/RolePermissions.vue'),
+      props: true
+  },
+  {
+      path: '/roles/:alias/users',
+      name: 'RoleUsers',
+      meta: 'Usuarios de Rol',
+      component: () => import('../views/RoleUsers.vue'),
+      props: true
+  },
+  {
       path: '/permissions',
       name: 'Permissions',
       meta: 'Permisos',
       component: () => import('../views/Permissions.vue')
+  },
+  {
+      path: '/permissions/:alias',
+      name: 'Permission',
+      meta: 'Permiso',
+      component: () => import('../views/Permission.vue'),
+      props: true
   },
   {
       path: '/contexts',

@@ -12,64 +12,38 @@
 
             <b-form @submit="onSubmit" v-if="show" class="hyp-form">
 
-                <b-form-group id="input-group-1" label="Nombre:" label-for="input-1" class="hyp-group">
-                    <b-form-input
+
+                <b-form-group id="input-group-1" label="Rol:" label-for="input-1" class="hyp-group">
+                    <b-form-select
                             id="input-1"
-                            v-model="form.name"
-                            type="text"
+                            v-model="form.role_id"
+                            :options="roles"
                             required
-                            placeholder="Nombre"></b-form-input>
+                    ></b-form-select>
                 </b-form-group>
 
-                <b-form-group id="input-group-2" label="Alias:" label-for="input-2" class="hyp-group">
-                    <b-form-input
+                <b-form-group id="input-group-2" label="Permiso:" label-for="input-2" class="hyp-group">
+                    <b-form-select
                             id="input-2"
-                            v-model="form.alias"
-                            type="text"
-                            required
-                            placeholder="Nombre"></b-form-input>
-                </b-form-group>
-
-                <b-form-group id="input-group-3" label="Estado:" label-for="input-3" class="hyp-group">
-                    <b-form-select
-                            id="input-3"
-                            v-model="form.state_id"
-                            :options="states"
+                            v-model="form.permission_id"
+                            :options="permissions"
                             required
                     ></b-form-select>
                 </b-form-group>
 
-                <b-form-group id="input-group-4" label="Icono:" label-for="input-4" class="hyp-group">
-                    <b-form-select
-                            id="input-4"
-                            v-model="form.icon"
-                            :options="roles_icon"
-                            required
-                    ></b-form-select>
-                </b-form-group>
 
-                <b-form-group id="input-group-5" label="Descripción:" label-for="input-5" class="hyp-group">
-                    <b-form-textarea
-                            id="input-5"
-                            v-model="form.description"
-                            placeholder="Escriba una descripción ..."
-                    ></b-form-textarea>
-                </b-form-group>
-
-
-                <b-form-group id="input-group-6" label-for="input-6" class="hyp-group">
+                <b-form-group id="input-group-3" label-for="input-3" class="hyp-group">
                     <b-form-checkbox
-                            id="input-6"
-                            v-model="form.is_visible"
-                            size="lg">Visible</b-form-checkbox>
+                            id="input-3"
+                            v-model="form.is_active"
+                            size="lg">Activo</b-form-checkbox>
                 </b-form-group>
 
 
 
                 <div class="action_buttons">
                     <router-link class="cancel" :to="{ name: 'Roles' }">Cancelar</router-link>
-                    <b-button v-if="is_new" type="submit" variant="primary" class="hyp_submit">Crear</b-button>
-                    <b-button v-else type="submit" variant="primary" class="hyp_submit">Editar</b-button>
+                    <b-button type="submit" variant="primary" class="hyp_submit">Asignar</b-button>
                 </div>
             </b-form>
 
@@ -81,66 +55,45 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {ROLE_ICONS} from '../api/options';
+
     import {
+        HYP_MANAGER_PERMISSION,
         HYP_MANAGER_ROLE,
-        HYP_MANAGER_STATE,
+        HYP_MANAGER_ROLEPERMISSION
     } from '../api/constants';
 
     export default {
-        name: 'Role',
+        name: 'AssignPermissions',
         components: {
             ContainerHeaderApp
         },
         data() {
             return {
                 username: null,
+                image: null,
+                imageSrc: null,
                 is_new: true,
-                title: 'Rol',
+                title: 'Asignar permisos',
                 subtitle: '',
                 text_modal: '',
-                roles_icon: ROLE_ICONS,
-                states: [],
+                roles: [],
+                permissions: [],
                 form: {
-                    alias: '',
-                    name: '',
-                    state_id: null,
-                    is_visible: '',
-                    icon: null,
-                    description: ''
+                    role_id: null,
+                    permission_id: null,
+                    is_active: true,
                 },
                 show: true
             }
         },
         beforeMount () {
-            this.alias = this.$route.params.alias;
-            this.is_new = this.alias === '_new';
-
-            this.alias = this.is_new ? null : this.alias;
-
-            if (!this.is_new) {
-                this.axios
-                    .get(HYP_MANAGER_ROLE + this.alias + '/?format=json')
-                    .then(response => {
-                        const data = response.data;
-                        this.title = data.name;
-                        this.form.alias = data.alias;
-                        this.form.name = data.name;
-                        this.form.state_id = data.state.alias;
-                        this.form.is_visible = data.is_visible;
-                        this.form.icon = data.icon;
-                        this.form.description = data.description;
-                    });
-            } else {
-                this.title = 'Crear Rol';
-            }
 
             this.axios
-                .get( HYP_MANAGER_STATE + '?format=json')
+                .get( HYP_MANAGER_ROLE+ '?format=json')
                 .then(response => {
                     const data = response.data;
                     const options = [
-                        { value: null, text: 'Selecciona el estado' }
+                        { value: null, text: 'Selecciona el rol' }
                     ];
 
                     data.forEach(element => {
@@ -151,55 +104,46 @@
                         options.push(option);
                     });
 
-                    this.states = options;
+                    this.roles = options;
+                });
+
+
+            this.axios
+                .get( HYP_MANAGER_PERMISSION + '?format=json')
+                .then(response => {
+                    const data = response.data;
+                    const options = [
+                        { value: null, text: 'Selecciona el permiso' }
+                    ];
+
+                    data.forEach(element => {
+                        let option = {
+                            value: element.alias,
+                            text: element.alias
+                        };
+                        options.push(option);
+                    });
+
+                    this.permissions = options;
                 });
 
         },
         methods: {
             onSubmit(evt) {
                 evt.preventDefault();
-                if (this.is_new) {
-                    this.axios
-                        .post(HYP_MANAGER_ROLE, this.form)
-                        .then(response => {
-                            console.log(response);
-                            this.text_modal = 'Se ha creado el rol';
-                            this.$router.replace({ name: 'Roles'});
+                this.axios
+                    .post(HYP_MANAGER_ROLEPERMISSION, this.form)
+                    .then(response => {
+                        console.log(response);
+                        this.text_modal = 'Se ha asignado el permiso';
+                        this.$router.replace({ name: 'Roles'});
 
-                        })
-                        .catch(error => {
-                            console.log(error);
-                            this.text_modal = 'No se ha podido crear el rol';
-                            this.showModal();
-                        });
-                } else {
-                    var myHeaders = new Headers();
-                    myHeaders.append("Content-Type", "application/json");
-
-                    var raw = JSON.stringify(
-                        this.form
-                        );
-
-                    var requestOptions = {
-                        method: 'PUT',
-                        headers: myHeaders,
-                        body: raw,
-                        redirect: 'follow'
-                    };
-
-                    fetch(HYP_MANAGER_ROLE + this.alias + '/', requestOptions)
-                        .then(response => {
-                            console.log(response);
-                            this.text_modal = 'Los cambios se han guardado';
-                            this.$router.replace({ name: 'Roles'});
-                        })
-                        .then(result => console.log(result))
-                        .catch(error => {
-                            console.log(error);
-                            this.text_modal = 'Hubo un error en la petición';
-                            this.showModal();
-                        });
-                }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.text_modal = 'No se ha podido asignar el permiso';
+                        this.showModal();
+                    });
 
             },
             showModal() {
@@ -232,7 +176,7 @@
                 flex-direction: row;
                 flex-wrap: wrap;
                 .hyp-group {
-                    width: 478px;
+                    width: 420px;
                     margin-right: 24px;
                     >label {
                         margin-bottom: 1px;

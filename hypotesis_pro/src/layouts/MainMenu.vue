@@ -1,9 +1,9 @@
 <template>
-    <div id="main_menu">
+    <div id="main_menu" :class="{'collapsed': is_collapsed}">
         <div id="main_menu_header">
             <img id="logo_main" src="../assets/hypotesis_logo.svg"  alt="Hypotesis PRO"/>
             <div class="user_name">{{ name }} {{surname1}}</div>
-            <div class="collapse_button"><i class="fas fa-angle-left"></i></div>
+            <div class="collapse_button" v-on:click="collapsed"><i class="fas fa-angle-left"></i></div>
         </div>
         <div id="main_menu_content">
             <div class="user_username">{{ username }}</div>
@@ -112,18 +112,21 @@
                 name: null,
                 surname1: null,
                 username: null,
-                role: null
+                role: null,
+                is_collapsed: false
             }
         },
         components: {},
         props: [],
-        computed: {
-
-        },
         methods: {
+            collapsed() {
+                this.$menu.collapsed = true;
+                this.is_collapsed = true;
+            }
         },
         beforeCreate () {
-            this.user = 'amanzanod';
+            this.is_collapsed = this.$menu.collapsed;
+            this.user = this.$user.username ? this.$user.username : 'amanzanod';
         },
         beforeMount () {
             this.axios
@@ -150,6 +153,11 @@
         min-width: 280px;
         position: relative;
         z-index: 3;
+        height: 100%;
+        &.collapsed {
+            width: 100px;
+            min-width: 100px;
+        }
         #main_menu_header {
             height: 218px;
             display: flex;

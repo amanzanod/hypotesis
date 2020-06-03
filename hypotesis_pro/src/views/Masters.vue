@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true" v-bind:create_href="create_href"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -36,8 +36,11 @@
               <template v-slot:cell(roles)="data">
                   <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.permissions.length }} permisos</router-link>
               </template>
+              <template v-slot:cell(category)="value">
+                  <router-link class="relation" to="data">{{value.item.category.name}}</router-link>
+              </template>
               <template v-slot:cell(users)="data">
-                  <router-link class="relation" to="data">Matricular en {{data.item.name}}</router-link>
+                  <router-link class="relation" to="data">Matricular {{data.alias}}</router-link>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
@@ -57,7 +60,7 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_MANAGER_GRADE} from '../api/constants';
+    import {HYP_CONTEXT_MASTER} from '../api/constants';
 
     export default {
         name: 'Masters',
@@ -68,18 +71,26 @@
             return {
                 title: 'Másters',
                 contexts: 0,
+                create_href: '/masters/_new',
                 filter: null,
                 fields: [
                     {
                         key: 'state',
                         label: 'Estado',
+                        class: 'text-center',
                         sortable: true,
                         formatter: (value) => {
-                            switch (value) {
+                            switch (value.alias) {
                                 case 'active':
                                     return `<i class="fas fa-check-circle"></i>`;
                                 case 'unactive':
                                     return `<i class="fas fa-minus-circle"></i>`;
+                                case 'finished':
+                                    return `<i class="fas fa-flag-checkered"></i>`;
+                                case 'creating':
+                                    return `<i class="fas fa-pencil-alt"></i>`;
+                                case 'paused':
+                                    return `<i class="fas fa-pause-circle"></i>`;
                             }
                         }
                     },
@@ -132,7 +143,7 @@
         },
         beforeMount () {
             this.axios
-                .get( HYP_MANAGER_GRADE + '?format=json')
+                .get( HYP_CONTEXT_MASTER + '?format=json')
                 .then(response => {
                     this.items = response.data;
                     this.contexts = response.data.length;
@@ -240,6 +251,9 @@
                         color: #28BB72;
                     }
                     &.fa-minus-circle {
+                        color: #DE8826;
+                    }
+                    &.fa-flag-checkered {
                         color: #E9782D;
                     }
                     &.fa-eye {

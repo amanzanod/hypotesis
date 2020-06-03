@@ -76,7 +76,7 @@ class EnrolContextViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=True, methods=['get'])
-    def courses(self, request, pk=None):
+    def contexts(self, request, pk=None):
         queryset = EnrolContext.objects.filter(user=pk)
         serializer = EnrolContextSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -90,10 +90,7 @@ class EnrolContextViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         try:
             data = request.data
-            object_model = State.objects.get(pk=pk)
-            object_model.user = data['user'] if 'user' in data else object_model.user
-            object_model.context = data['context'] if 'context' in data else object_model.context
-            object_model.role = data['role'] if 'role' in data else object_model.role
+            object_model = EnrolContext.objects.get(pk=pk)
             object_model.state_id = data['state_id'] if 'state_id' in data else object_model.state_id
             object_model.state_at = timezone.now() if 'state_id' in data else object_model.state_at
             object_model.save()

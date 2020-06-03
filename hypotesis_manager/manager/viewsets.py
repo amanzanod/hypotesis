@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.forms.models import model_to_dict
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 
 from .models import UserManager, Role, Permission, PermissionRole, Context, Country, Province, State, Language
 from .serializer import UserManagerSerializer, RoleSerializer, PermissionSerializer, PermissionRoleSerializer, \
@@ -44,6 +45,22 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({
                 'success': False,
                 'errors': serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'])
+    def login(self, request, pk=None):
+        try:
+            data = request.POST
+            password = data['password']
+            queryset = get_object_or_404(UserManager, pk=pk, password=password)
+            return Response({
+                'success': True,
+                'data': queryset.username
+            }, status=status.HTTP_202_ACCEPTED)
+        except Exception as e:
+            return Response({
+                'success': False,
+                'errors': str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
 
     # Update.
@@ -327,3 +344,23 @@ class PermissionRoleViewSet(viewsets.ModelViewSet):
                 'errors': str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
 
+
+# Login View Set.
+class LoginViewSet(viewsets.ModelViewSet):
+    queryset = UserManager.objects.all()
+    serializer_class = UserManagerSerializer
+
+    @action(detail=True, methods=['post'])
+    def login(self, request, pk=None):
+        try:
+            data = request.data
+            object_model = UserManager.objects.filter(email=data.email, password=data.password)
+            return Response({
+                'success': True,
+                'data': object_model.username
+            }, status=status.HTTP_202_ACCEPTED)
+        except Exception as e:
+            return Response({
+                'success': False,
+                'errors': str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)

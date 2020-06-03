@@ -14,7 +14,7 @@
                   ></b-form-input>
                   <span class="search_input"><i class="fas fa-search"></i></span>
               </div>
-              <b-form-select v-model="selected" :options="options"></b-form-select>
+              <b-form-select v-model="filter" :options="options"></b-form-select>
               <span class="filter_options"><i class="fas fa-filter"></i></span>
           </div>
 
@@ -131,7 +131,7 @@
                         class: 'text-left',
                         sortable: true,
                         formatter: (value) => {
-                            return new Date(value).toLocaleDateString();
+                            return value
                         }
 
                     },
@@ -178,7 +178,7 @@
                         let option = {
                             value: element.alias,
                             text: element.name,
-                            disabled: element.state !== 'active'
+                            disabled: element.state.alias !== 'active'
                         };
                         options.push(option);
                     });

@@ -1,6 +1,11 @@
 <template>
 
-    <router-link class="relation" to="`/applications/${item.alias}`">{{ num }} usuarios</router-link>
+    <router-link v-if="num===1" class="relation" :to="href">
+        {{ num }} usuario
+    </router-link>
+    <router-link v-else class="relation" :to="href">
+        {{ num }} usuarios
+    </router-link>
 
 </template>
 
@@ -11,7 +16,7 @@
     export default {
         name: 'LinkTable',
         props: {
-            href: String,
+            href: Object,
             item: Object
         },
         data() {

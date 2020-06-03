@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true" v-bind:create_href="create_href"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -14,6 +14,7 @@
                   ></b-form-input>
                   <span class="search_input"><i class="fas fa-search"></i></span>
               </div>
+              <b-form-select v-model="filter" :options="categories_options"></b-form-select>
               <span class="filter_options"><i class="fas fa-filter"></i></span>
           </div>
 
@@ -39,6 +40,9 @@
               <template v-slot:cell(users)="data">
                   <router-link class="relation" to="data">Matricular en {{data.item.name}}</router-link>
               </template>
+              <template v-slot:cell(category)="data">
+                  <router-link class="relation" to="data">{{data.item.category.name}}</router-link>
+              </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
@@ -57,7 +61,7 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_MANAGER_GRADE} from '../api/constants';
+    import {HYP_CONTEXT_GRADE, HYP_CONTEXT_CATEGORY} from '../api/constants';
 
     export default {
         name: 'Grades',
@@ -68,18 +72,26 @@
             return {
                 title: 'Grados',
                 contexts: 0,
+                create_href: '/grades/_new',
+                class: 'text-center',
                 filter: null,
+                categories_options: [],
                 fields: [
                     {
                         key: 'state',
                         label: 'Estado',
+                        class: 'text-center',
                         sortable: true,
                         formatter: (value) => {
-                            switch (value) {
+                            switch (value.alias) {
                                 case 'active':
                                     return `<i class="fas fa-check-circle"></i>`;
                                 case 'unactive':
                                     return `<i class="fas fa-minus-circle"></i>`;
+                                case 'finished':
+                                    return `<i class="fas fa-flag-checkered"></i>`;
+                                case 'paused':
+                                    return `<i class="fas fa-pause-circle"></i>`;
                             }
                         }
                     },
@@ -132,10 +144,29 @@
         },
         beforeMount () {
             this.axios
-                .get( HYP_MANAGER_GRADE + '?format=json')
+                .get( HYP_CONTEXT_GRADE + '?format=json')
                 .then(response => {
                     this.items = response.data;
                     this.contexts = response.data.length;
+                });
+            this.axios
+                .get( HYP_CONTEXT_CATEGORY + '?format=json')
+                .then(response => {
+                    const data = response.data;
+                    const options = [
+                        { value: null, text: 'Todas las categorías' }
+                    ];
+
+                    data.forEach(element => {
+                        let option = {
+                            value: element.alias,
+                            text: element.name,
+                            disabled: element.state.alias !== 'active'
+                        };
+                        options.push(option);
+                    });
+
+                    this.categories_options = options;
                 });
 
         },
@@ -245,6 +276,16 @@
                     &.fa-eye {
                         color: #0190D8;
                         margin-right: 8px;
+                    }
+                    &.fa-pencil-alt {
+                        color: #1A9AD2;
+                        margin-right: 8px;
+                    }
+                    &.fa-flag-checkered {
+                        color: #E9782D;
+                    }
+                    &.fa-pause-circle {
+                        color: #989898;
                     }
                     &.fa-eye-slash {
                         color: rgba(69, 69, 69, 0.18);

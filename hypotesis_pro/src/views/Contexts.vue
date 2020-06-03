@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true" v-bind:create_href="create_href"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -27,23 +27,8 @@
                    @filtered="onFiltered"
                    responsive="sm"
                    :tbody-tr-class="rowClass">
-              <template v-slot:cell(state)="state">
-                  <span v-html="state.value"></span>
-              </template>
-              <template v-slot:cell(icon)="icon">
-                  <span v-html="icon.value"></span>
-              </template>
-              <template v-slot:cell(roles)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.permissions.length }} permisos</router-link>
-              </template>
-              <template v-slot:cell(users)="data">
-                  <router-link class="relation" to="data">Matricular en {{data.item.name}}</router-link>
-              </template>
-              <template v-slot:cell(actions)="actions">
-                  <span v-html="actions.value"></span>
-              </template>
-              <template v-slot:cell(name)="data">
-                  <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">{{ data.value }}</a>
+              <template v-slot:cell(actions)="data">
+                  <router-link :to="{ name: 'Context', params: { alias: data.item.alias }}"><i class="fas fa-cog"></i></router-link>
               </template>
           </b-table>
 
@@ -73,7 +58,7 @@
                     {
                         key: 'name',
                         label: 'nombre',
-                        class: 'text-left',
+                        class: 'text-left context_name',
                         sortable: true
                     },
                     {
@@ -82,25 +67,6 @@
                         class: 'text-left',
                         sortable: true
                     },
-                    {
-                        key: 'permissions',
-                        label: 'Permisos',
-                        class: 'text-center'
-                    },
-                    {
-                        key: 'users',
-                        label: 'Usuarios',
-                        class: 'text-center'
-                    },
-                    {
-                        key: 'actions',
-                        label: 'Acciones',
-                        formatter: (value, key, item) => {
-                            let html = ``;
-                            html += `<a href="/${item.username}"><i class="fas fa-cog"></i></a>`;
-                            return html;
-                        }
-                    }
                 ],
                 items: null
             }
@@ -186,6 +152,9 @@
         thead {
             border: 1px solid #DFDFDF;
             background-color: #F6F6F6;
+        }
+        th.context_name, td.context_name {
+            padding-left: 30px !important;
         }
         tbody {
             tr {

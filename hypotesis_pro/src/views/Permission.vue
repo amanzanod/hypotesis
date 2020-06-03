@@ -12,16 +12,7 @@
 
             <b-form @submit="onSubmit" v-if="show" class="hyp-form">
 
-                <b-form-group id="input-group-1" label="Nombre:" label-for="input-1" class="hyp-group">
-                    <b-form-input
-                            id="input-1"
-                            v-model="form.name"
-                            type="text"
-                            required
-                            placeholder="Nombre"></b-form-input>
-                </b-form-group>
-
-                <b-form-group id="input-group-2" label="Alias:" label-for="input-2" class="hyp-group">
+                <b-form-group id="input-group-1" label="Alias:" label-for="input-1" class="hyp-group">
                     <b-form-input
                             id="input-2"
                             v-model="form.alias"
@@ -39,11 +30,11 @@
                     ></b-form-select>
                 </b-form-group>
 
-                <b-form-group id="input-group-4" label="Icono:" label-for="input-4" class="hyp-group">
+                <b-form-group id="input-group-4" label="Contexto:" label-for="input-4" class="hyp-group">
                     <b-form-select
                             id="input-4"
-                            v-model="form.icon"
-                            :options="roles_icon"
+                            v-model="form.context_id"
+                            :options="contexts"
                             required
                     ></b-form-select>
                 </b-form-group>
@@ -67,7 +58,7 @@
 
 
                 <div class="action_buttons">
-                    <router-link class="cancel" :to="{ name: 'Roles' }">Cancelar</router-link>
+                    <router-link class="cancel" :to="{ name: 'Permissions' }">Cancelar</router-link>
                     <b-button v-if="is_new" type="submit" variant="primary" class="hyp_submit">Crear</b-button>
                     <b-button v-else type="submit" variant="primary" class="hyp_submit">Editar</b-button>
                 </div>
@@ -81,14 +72,15 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {ROLE_ICONS} from '../api/options';
+
     import {
-        HYP_MANAGER_ROLE,
         HYP_MANAGER_STATE,
+        HYP_MANAGER_PERMISSION,
+        HYP_MANAGER_CONTEXT,
     } from '../api/constants';
 
     export default {
-        name: 'Role',
+        name: 'Permission',
         components: {
             ContainerHeaderApp
         },
@@ -96,18 +88,17 @@
             return {
                 username: null,
                 is_new: true,
-                title: 'Rol',
+                title: 'Permiso',
                 subtitle: '',
                 text_modal: '',
-                roles_icon: ROLE_ICONS,
                 states: [],
+                contexts: [],
                 form: {
                     alias: '',
-                    name: '',
                     state_id: null,
                     is_visible: '',
                     icon: null,
-                    description: ''
+                    context_id: null
                 },
                 show: true
             }
@@ -120,19 +111,18 @@
 
             if (!this.is_new) {
                 this.axios
-                    .get(HYP_MANAGER_ROLE + this.alias + '/?format=json')
+                    .get(HYP_MANAGER_PERMISSION + this.alias + '/?format=json')
                     .then(response => {
                         const data = response.data;
-                        this.title = data.name;
+                        this.title = data.alias;
                         this.form.alias = data.alias;
-                        this.form.name = data.name;
                         this.form.state_id = data.state.alias;
                         this.form.is_visible = data.is_visible;
-                        this.form.icon = data.icon;
+                        this.form.context_id = data.context.alias;
                         this.form.description = data.description;
                     });
             } else {
-                this.title = 'Crear Rol';
+                this.title = 'Crear Permiso';
             }
 
             this.axios
@@ -154,22 +144,41 @@
                     this.states = options;
                 });
 
+            this.axios
+                .get( HYP_MANAGER_CONTEXT + '?format=json')
+                .then(response => {
+                    const data = response.data;
+                    const options = [
+                        { value: null, text: 'Selecciona el contexto' }
+                    ];
+
+                    data.forEach(element => {
+                        let option = {
+                            value: element.alias,
+                            text: element.name
+                        };
+                        options.push(option);
+                    });
+
+                    this.contexts = options;
+                });
+
         },
         methods: {
             onSubmit(evt) {
                 evt.preventDefault();
                 if (this.is_new) {
                     this.axios
-                        .post(HYP_MANAGER_ROLE, this.form)
+                        .post(HYP_MANAGER_PERMISSION, this.form)
                         .then(response => {
                             console.log(response);
-                            this.text_modal = 'Se ha creado el rol';
-                            this.$router.replace({ name: 'Roles'});
+                            this.text_modal = 'Se ha creado el permiso';
+                            this.$router.replace({ name: 'Permissions'});
 
                         })
                         .catch(error => {
                             console.log(error);
-                            this.text_modal = 'No se ha podido crear el rol';
+                            this.text_modal = 'No se ha podido crear el permiso';
                             this.showModal();
                         });
                 } else {
@@ -187,11 +196,11 @@
                         redirect: 'follow'
                     };
 
-                    fetch(HYP_MANAGER_ROLE + this.alias + '/', requestOptions)
+                    fetch(HYP_MANAGER_PERMISSION + this.alias + '/', requestOptions)
                         .then(response => {
                             console.log(response);
                             this.text_modal = 'Los cambios se han guardado';
-                            this.$router.replace({ name: 'Roles'});
+                            this.$router.replace({ name: 'Permissions'});
                         })
                         .then(result => console.log(result))
                         .catch(error => {

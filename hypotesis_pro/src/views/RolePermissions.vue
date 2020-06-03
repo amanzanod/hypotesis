@@ -1,7 +1,11 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true" v-bind:create_href="create_href"/>
+      <ContainerHeaderApp
+              v-bind:subtitle="permissions"
+              v-bind:title="title"
+              v-bind:list="true"
+              v-bind:create_href="create_href"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -14,6 +18,7 @@
                   ></b-form-input>
                   <span class="search_input"><i class="fas fa-search"></i></span>
               </div>
+              <b-form-select v-model="filter" :options="context_options"></b-form-select>
               <span class="filter_options"><i class="fas fa-filter"></i></span>
           </div>
 
@@ -30,20 +35,29 @@
               <template v-slot:cell(state)="state">
                   <span v-html="state.value"></span>
               </template>
+              <template v-slot:cell(context)="data">
+                  <router-link class="relation" :to="{ name: 'Courses'}">{{ data.item.context.name }}</router-link>
+              </template>
               <template v-slot:cell(icon)="icon">
                   <span v-html="icon.value"></span>
               </template>
               <template v-slot:cell(roles)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.permissions.length }} permisos</router-link>
+                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.roles.length }} roles</router-link>
               </template>
               <template v-slot:cell(users)="data">
-                  <router-link class="relation" to="data">Matricular en {{data.item.name}}</router-link>
+                  <LinkTable v-bind:item="data.item"/>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
               <template v-slot:cell(name)="data">
                   <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">{{ data.value }}</a>
+              </template>
+              <template v-slot:cell(actions)="data">
+                  <router-link v-if="data.item.is_visible" :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-eye"></i></router-link>
+                  <router-link v-else :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-eye-slash"></i></router-link>
+                  <router-link :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-trash-alt"></i></router-link>
+                  <router-link :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-cog"></i></router-link>
               </template>
           </b-table>
 
@@ -57,18 +71,25 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_CONTEXT_CLASSROOM} from '../api/constants';
+    import {HYP_MANAGER_PERMISSION, HYP_MANAGER_CONTEXT, HYP_MANAGER_ROLE} from '../api/constants';
+
+    import LinkTable from '@/layouts/table/LinkTable.vue';
 
     export default {
-        name: 'Classrooms',
+        name: 'RolePermissions',
         components: {
-            ContainerHeaderApp
+            ContainerHeaderApp, LinkTable
         },
         data() {
             return {
-                title: 'Aulas',
-                contexts: 0,
-                create_href: '/classrooms/_new',
+                title: 'Permisos',
+                context_selected: null,
+                create_href: '/permissions/_new',
+                context_options: [],
+                role_selected: null,
+                role_options: [],
+                permissions: '0',
+                role: null,
                 filter: null,
                 fields: [
                     {
@@ -82,25 +103,13 @@
                                     return `<i class="fas fa-check-circle"></i>`;
                                 case 'unactive':
                                     return `<i class="fas fa-minus-circle"></i>`;
-                                case 'finished':
-                                    return `<i class="fas fa-flag-checkered"></i>`;
-                                case 'creating':
-                                    return `<i class="fas fa-pencil-alt"></i>`;
-                                case 'paused':
-                                    return `<i class="fas fa-pause-circle"></i>`;
                             }
                         }
                     },
                     {
-                        key: 'parent',
-                        label: 'curso',
-                        class: 'text-left',
-                        sortable: true
-                    },
-                    {
-                        key: 'name',
-                        label: 'nombre',
-                        class: 'text-left',
+                        key: 'context',
+                        label: 'Contexto',
+                        class: 'text-center',
                         sortable: true
                     },
                     {
@@ -122,31 +131,76 @@
                         sortable: true
                     },
                     {
+                        key: 'roles',
+                        label: 'Roles',
+                        class: 'text-center'
+                    },
+                    {
                         key: 'users',
                         label: 'Usuarios',
                         class: 'text-center'
                     },
                     {
                         key: 'actions',
-                        label: 'Acciones',
-                        formatter: (value, key, item) => {
-                            let html = ``;
-                            html += `<a href="/${item.username}"><i class="fas fa-cog"></i></a>`;
-                            return html;
-                        }
+                        label: 'Acciones'
                     }
                 ],
                 items: null
             }
         },
         beforeMount () {
+
+            this.role = this.$route.params.alias;
             this.axios
-                .get( HYP_CONTEXT_CLASSROOM + '?format=json')
+                .get( HYP_MANAGER_PERMISSION + this.$route.params.alias + '/?format=json')
                 .then(response => {
                     this.items = response.data;
-                    this.contexts = response.data.length;
+                    this.permissions = response.data.length + '';
                 });
+            this.axios
+                .get( HYP_MANAGER_CONTEXT + '?format=json')
+                .then(response => {
+                    const data = response.data;
+                    const options = [
+                        { value: null, text: 'Todos los contextos' }
+                    ];
 
+                    data.forEach(element => {
+                        let option = {
+                            value: element.alias,
+                            text: element.name,
+                            disabled: false
+                        };
+                        options.push(option);
+                    });
+
+                    this.context_options = options;
+                });
+            this.axios
+                .get( HYP_MANAGER_ROLE + '?format=json')
+                .then(response => {
+                    const data = response.data;
+                    const options = [
+                        { value: null, text: 'Todos los roles' }
+                    ];
+
+                    data.forEach(element => {
+                        let option = {
+                            value: element.alias,
+                            text: element.name,
+                            disabled: element.state.alias !== 'active'
+                        };
+                        options.push(option);
+                    });
+
+                    this.role_options = options;
+
+                    let current_role = data.find(element => {
+                        return element.alias === this.role
+                    });
+
+                    this.title = 'Permisos de ' + current_role.name;
+                });
         },
         methods: {
             rowClass(item, type) {
@@ -155,7 +209,7 @@
             },
             onFiltered(filteredItems) {
                 // Trigger pagination to update the number of buttons/pages due to filtering
-                this.users = filteredItems.length;
+                this.permissions = filteredItems.length;
             }
         }
     }
@@ -223,6 +277,10 @@
         }
         tbody {
             tr {
+                td {
+                    vertical-align: middle;
+                    padding: 10px;
+                }
                 border: 1px solid #DFDFDF;
                 &:nth-of-type(odd) {
                     background-color: rgba(0, 0, 0, 0.02);

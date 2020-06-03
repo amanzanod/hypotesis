@@ -1,22 +1,27 @@
-# etapa de compilación
+# Étapa de compilación
 FROM node:12-alpine3.10 as build-stage
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 RUN npm cache clean --force
+
+ENV HYP_MANAGER_URL $HYP_MANAGER_URL
+ENV HYP_CONTEXT_URL $HYP_CONTEXT_URL
+ENV HYP_ITEM_URL $HYP_ITEM_URL
+ENV HYP_ENROL_URL $HYP_ENROL_URL
+
 COPY . .
 RUN npm run build
 
-# etapa de producción
+# Étapa de producción
 FROM nginx:1.13.12-alpine as production-stage
-# Copiar los archivos finales de la aplicación en la carpeta del servidor
 COPY --from=build-stage /app/dist /var/www/html
-# Hacer que todos los archivos pertenezcan al usuario nginx
 RUN chown -R nginx:nginx /var/www/html
 
 ENV HYP_MANAGER_URL $HYP_MANAGER_URL
+ENV HYP_CONTEXT_URL $HYP_CONTEXT_URL
+ENV HYP_ITEM_URL $HYP_ITEM_URL
+ENV HYP_ENROL_URL $HYP_ENROL_URL
 
-# Abrir el puerto 80 del contenedor
 EXPOSE 80
-# Iniciar el servidor Nginx
 CMD ["nginx", "-g", "daemon off;"]

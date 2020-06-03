@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true" v-bind:create_href="create_href"/>
+      <ContainerHeaderApp v-bind:subtitle="users" v-bind:title="title" v-bind:list="true" v-bind:create_href="create_href"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -30,20 +30,28 @@
               <template v-slot:cell(state)="state">
                   <span v-html="state.value"></span>
               </template>
-              <template v-slot:cell(icon)="icon">
-                  <span v-html="icon.value"></span>
-              </template>
-              <template v-slot:cell(roles)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.permissions.length }} permisos</router-link>
-              </template>
-              <template v-slot:cell(users)="data">
-                  <router-link class="relation" to="data">Matricular en {{data.item.name}}</router-link>
+              <template v-slot:cell(role)="data">
+                  <router-link class="relation" :to="{ name: 'Role', params: { alias: data.item.role.alias }}">{{ data.item.role.name }}</router-link>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
               <template v-slot:cell(name)="data">
-                  <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">{{ data.value }}</a>
+                  <div class="user-name">
+                      <div class="picture_mini">
+                        <b-img :src="data.item.picture"></b-img>
+                      </div>
+                      <div class="data">
+                          <router-link class="fullname" :to="{ name: 'User', params: { username: data.item.username }}">{{ data.value }}</router-link>
+                          <span class="title">{{ data.item.title }}</span>
+                      </div>
+                  </div>
+              </template>
+              <template v-slot:cell(actions)="data">
+                  <router-link v-if="data.item.is_visible" :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-eye"></i></router-link>
+                  <router-link v-else :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-eye-slash"></i></router-link>
+                  <router-link :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-trash-alt"></i></router-link>
+                  <router-link :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-cog"></i></router-link>
               </template>
           </b-table>
 
@@ -57,24 +65,26 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_CONTEXT_CLASSROOM} from '../api/constants';
+    import {HYP_MANAGER_ROLE} from '../api/constants';
 
     export default {
-        name: 'Classrooms',
+        name: 'RoleUsers',
         components: {
             ContainerHeaderApp
         },
         data() {
             return {
-                title: 'Aulas',
-                contexts: 0,
-                create_href: '/classrooms/_new',
+                title: 'Usuarios del Rol',
+                users: '0',
+                create_href: '/users/_new',
+                selected: null,
+                options: [],
                 filter: null,
                 fields: [
                     {
                         key: 'state',
                         label: 'Estado',
-                        class: 'text-center',
+                        class: ['text-center', 'vertical-align'],
                         sortable: true,
                         formatter: (value) => {
                             switch (value.alias) {
@@ -82,69 +92,76 @@
                                     return `<i class="fas fa-check-circle"></i>`;
                                 case 'unactive':
                                     return `<i class="fas fa-minus-circle"></i>`;
-                                case 'finished':
-                                    return `<i class="fas fa-flag-checkered"></i>`;
-                                case 'creating':
-                                    return `<i class="fas fa-pencil-alt"></i>`;
-                                case 'paused':
-                                    return `<i class="fas fa-pause-circle"></i>`;
                             }
                         }
                     },
                     {
-                        key: 'parent',
-                        label: 'curso',
+                        key: 'role',
+                        label: 'Rol',
                         class: 'text-left',
                         sortable: true
                     },
                     {
                         key: 'name',
-                        label: 'nombre',
+                        label: 'Nombre',
+                        class: 'text-left',
+                        sortable: true,
+                        formatter: (value, key, item) => {
+                            return item.name + ' ' + item.surname1 + ' ' + item.surname2
+                        }
+                    },
+                    {
+                        key: 'email',
+                        label: 'E-mail',
+                        class: 'text-left',
+                    },
+                    {
+                        key: 'username',
+                        label: 'Usuario',
                         class: 'text-left',
                         sortable: true
                     },
                     {
-                        key: 'alias',
-                        label: 'Alias',
+                        key: 'country',
+                        label: 'País',
                         class: 'text-left',
-                        sortable: true
-                    },
-                    {
-                        key: 'created_at',
-                        label: 'Creado',
-                        class: 'text-left',
-                        sortable: true
+                        sortable: true,
+                        formatter: (value) => {
+                            return value.name
+                        }
                     },
                     {
                         key: 'updated_at',
-                        label: 'Actualizado',
+                        label: 'Último Acceso',
                         class: 'text-left',
-                        sortable: true
-                    },
-                    {
-                        key: 'users',
-                        label: 'Usuarios',
-                        class: 'text-center'
+                        sortable: true,
+                        formatter: (value) => {
+                            return value
+                        }
+
                     },
                     {
                         key: 'actions',
-                        label: 'Acciones',
-                        formatter: (value, key, item) => {
-                            let html = ``;
-                            html += `<a href="/${item.username}"><i class="fas fa-cog"></i></a>`;
-                            return html;
-                        }
+                        label: 'Acciones'
                     }
                 ],
                 items: null
             }
         },
         beforeMount () {
+            this.role = this.$route.params.alias;
+
             this.axios
-                .get( HYP_CONTEXT_CLASSROOM + '?format=json')
+                .get( HYP_MANAGER_ROLE + this.role + '/users/?format=json')
                 .then(response => {
                     this.items = response.data;
-                    this.contexts = response.data.length;
+                    this.users = response.data.length + '';
+                });
+
+            this.axios
+                .get( HYP_MANAGER_ROLE + this.role + '/?format=json')
+                .then(response => {
+                    this.title = 'Usuarios del rol ' + response.data.name;
                 });
 
         },
@@ -223,6 +240,10 @@
         }
         tbody {
             tr {
+                td {
+                    vertical-align: middle;
+                    padding: 6px;
+                }
                 border: 1px solid #DFDFDF;
                 &:nth-of-type(odd) {
                     background-color: rgba(0, 0, 0, 0.02);
@@ -242,9 +263,35 @@
                     }
                 }
 
+                .user-name {
+                    display: flex;
+                    flex-direction: row;
+                    .picture_mini {
+                        width: 36px;
+                        height: 36px;
+                        margin-right: 7px;
+                        border-radius: 18px;
+                        overflow: hidden;
+                        >img {
+                            width: 36px;
+                        }
+                    }
+                    .data {
+                        display: flex;
+                        flex-direction: column;
+                        .fullname {
+
+                        }
+                        span.title {
+                            font-size: 13px;
+                            line-height: 8px;
+                            color: #638f96;
+                        }
+                    }
+                }
+
                 i.fas {
                     font-size: 20px;
-                    color: #727475;
                     &.fa-check-circle {
                         color: #28BB72;
                     }

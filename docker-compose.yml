@@ -13,30 +13,6 @@ services:
     depends_on:
       - hypotesis_db
 
-  ## HYPOTESIS PRO
-  hypotesis_pro:
-    build: hypotesis_pro/.
-    container_name: hypotesis_pro
-    image: hypotesis_pro:latest
-    working_dir: ${HYP_PRO_WORKDIR_BUILD}
-    environment:
-      - NODE_ENV=production
-      - HYP_MANAGER_URL=${HYP_MANAGER_SERVER}:${HYP_MANAGER_PORT}
-    env_file:
-      - hypotesis_pro/.env
-    ports:
-      - ${HYP_PRO_PORT}:${HYP_PRO_PORT}
-    volumes:
-      - ./hypotesis_pro/nginx.conf:/etc/nginx/nginx.conf
-      - ./hypotesis_pro/default.conf:/etc/nginx/conf.d/default.conf
-    stdin_open: true
-    tty: true
-    #depends_on:
-    #  - hypotesis_manager
-    # - hypotesis_context
-    # - hypotesis_enrol
-    # - hypotesis_item
-
   ## HYPOTESIS MANAGER
   hypotesis_manager:
     restart: always
@@ -168,6 +144,33 @@ services:
     depends_on:
       - hypotesis_django
       - hypotesis_db
+
+   ## HYPOTESIS PRO
+  hypotesis_pro:
+    build: hypotesis_pro/.
+    container_name: hypotesis_pro
+    image: hypotesis_pro:latest
+    working_dir: ${HYP_PRO_WORKDIR_BUILD}
+    environment:
+      - NODE_ENV=production
+      - HYP_MANAGER_URL=${HYP_MANAGER_SERVER}:${HYP_MANAGER_PORT}
+      - HYP_CONTEXT_URL=${HYP_CONTEXT_SERVER}:${HYP_CONTEXT_PORT}
+      - HYP_ITEM_URL=${HYP_ITEM_SERVER}:${HYP_ITEM_PORT}
+      - HYP_ENROL_URL=${HYP_ENROL_SERVER}:${HYP_ENROL_PORT}
+    env_file:
+      - hypotesis_pro/.env
+    ports:
+      - ${HYP_PRO_PORT}:${HYP_PRO_PORT}
+    volumes:
+      - ./hypotesis_pro/nginx.conf:/etc/nginx/nginx.conf
+      - ./hypotesis_pro/default.conf:/etc/nginx/conf.d/default.conf
+    stdin_open: true
+    tty: true
+    depends_on:
+      - hypotesis_manager
+      - hypotesis_context
+      - hypotesis_enrol
+      - hypotesis_item
 
   ## HYPOTESIS DB
   hypotesis_db:

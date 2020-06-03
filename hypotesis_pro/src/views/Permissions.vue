@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:subtitle="permissions" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:subtitle="permissions" v-bind:title="title" v-bind:list="true" v-bind:create_href="create_href"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -14,8 +14,8 @@
                   ></b-form-input>
                   <span class="search_input"><i class="fas fa-search"></i></span>
               </div>
-              <b-form-select v-model="context_selected" :options="context_options"></b-form-select>
-              <b-form-select v-model="role_selected" :options="role_options"></b-form-select>
+              <b-form-select v-model="filter" :options="context_options"></b-form-select>
+              <b-form-select v-model="filter" :options="role_options"></b-form-select>
               <span class="filter_options"><i class="fas fa-filter"></i></span>
           </div>
 
@@ -39,16 +39,20 @@
                   <span v-html="icon.value"></span>
               </template>
               <template v-slot:cell(roles)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.roles.length }} roles</router-link>
-              </template>
-              <template v-slot:cell(users)="data">
-                  <LinkTable v-bind:item="data.item"/>
+                  <span v-if="data.item.roles.length===1" class="relation">{{ data.item.roles.length }} rol</span>
+                  <span v-else class="relation">{{ data.item.roles.length }} roles</span>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
               <template v-slot:cell(name)="data">
                   <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">{{ data.value }}</a>
+              </template>
+              <template v-slot:cell(actions)="data">
+                  <router-link v-if="data.item.is_visible" :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-eye"></i></router-link>
+                  <router-link v-else :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-eye-slash"></i></router-link>
+                  <router-link :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-trash-alt"></i></router-link>
+                  <router-link :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-cog"></i></router-link>
               </template>
           </b-table>
 
@@ -64,17 +68,17 @@
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
     import {HYP_MANAGER_PERMISSION, HYP_MANAGER_CONTEXT, HYP_MANAGER_ROLE} from '../api/constants';
 
-    import LinkTable from '@/layouts/table/LinkTable.vue';
 
     export default {
         name: 'Permissions',
         components: {
-            ContainerHeaderApp, LinkTable
+            ContainerHeaderApp
         },
         data() {
             return {
                 title: 'Permisos',
                 context_selected: null,
+                create_href: '/permissions/_new',
                 context_options: [],
                 role_selected: null,
                 role_options: [],
@@ -84,6 +88,7 @@
                     {
                         key: 'state',
                         label: 'Estado',
+                        class: 'text-center',
                         sortable: true,
                         formatter: (value) => {
                             switch (value.alias) {
@@ -107,6 +112,11 @@
                         sortable: true
                     },
                     {
+                        key: 'description',
+                        label: 'Descripción',
+                        class: 'text-left'
+                    },
+                    {
                         key: 'created_at',
                         label: 'Creado',
                         class: 'text-left',
@@ -124,29 +134,8 @@
                         class: 'text-center'
                     },
                     {
-                        key: 'users',
-                        label: 'Usuarios',
-                        class: 'text-center'
-                    },
-                    {
                         key: 'actions',
-                        label: 'Acciones',
-                        formatter: (value, key, item) => {
-                            let html = ``;
-                            if (item.is_visible === true) {
-                                html += `<b-button v-b-tooltip.hover href="/${item.username}" title="Visible">
-                                            <i class="fas fa-eye"></i>
-                                         </b-button>`;
-                            } else {
-                                html += `<b-button v-b-tooltip.hover href="/${item.username}" title="No Visible">
-                                            <i class="fas fa-eye-slash"></i>
-                                         </b-button>`;
-                            }
-
-                            html += `<a href="/${item.username}"><i class="fas fa-trash-alt"></i></a>`;
-                            html += `<a href="/${item.username}"><i class="fas fa-cog"></i></a>`;
-                            return html;
-                        }
+                        label: 'Acciones'
                     }
                 ],
                 items: null
@@ -171,7 +160,7 @@
                         let option = {
                             value: element.alias,
                             text: element.name,
-                            disabled: element.state !== 'active'
+                            disabled: false
                         };
                         options.push(option);
                     });
@@ -190,7 +179,7 @@
                         let option = {
                             value: element.alias,
                             text: element.name,
-                            disabled: element.state !== 'active'
+                            disabled: element.state.alias !== 'active'
                         };
                         options.push(option);
                     });
@@ -205,7 +194,7 @@
             },
             onFiltered(filteredItems) {
                 // Trigger pagination to update the number of buttons/pages due to filtering
-                this.users = filteredItems.length;
+                this.permissions = filteredItems.length;
             }
         }
     }

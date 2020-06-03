@@ -14,13 +14,18 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import table from 'bootstrap-vue/esm/components/table/table';
 import tooltip from 'bootstrap-vue/esm/components/tooltip/tooltip';
 import button from 'bootstrap-vue/esm/components/button/button';
+import bform from 'bootstrap-vue/esm/components/form/form';
 import formgroup from 'bootstrap-vue/esm/components/form-group/form-group';
 import formselect from 'bootstrap-vue/esm/components/form-select/form-select';
 import forminput from 'bootstrap-vue/esm/components/form-input/form-input';
 import inputgroupappend from 'bootstrap-vue/esm/components/input-group/input-group-append';
+import bimg from 'bootstrap-vue/esm/components/image/img';
+
 
 
 Vue.config.productionTip = false;
+Vue.prototype.$menu = {collapsed:false};
+Vue.prototype.$user = {username:false};
 
 // Instal VueAXIOS
 Vue.use(VueAxios, axios);
@@ -34,8 +39,11 @@ Vue.component('b-tooltip', tooltip);
 Vue.component('b-button', button);
 Vue.component('b-form-group', formgroup);
 Vue.component('b-form-select', formselect);
+Vue.component('b-img', bimg);
+Vue.component('b-form', bform);
 Vue.component('b-form-input', forminput);
 Vue.component('b-input-group-append', inputgroupappend);
+
 
 new Vue({
   router,

@@ -17,7 +17,9 @@
             subtitle: String,
             title: String,
             list: Boolean,
-            create_href: String
+            create_href: String,
+            btn_back: Boolean,
+            entity: String
         }
     }
 

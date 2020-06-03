@@ -14,6 +14,7 @@
                   ></b-form-input>
                   <span class="search_input"><i class="fas fa-search"></i></span>
               </div>
+              <router-link class="btn-assign" :to="{ name: 'AssignPermissions' }">Asignar permisos</router-link>
               <span class="filter_options"><i class="fas fa-filter"></i></span>
           </div>
 
@@ -34,16 +35,23 @@
                   <span v-html="icon.value"></span>
               </template>
               <template v-slot:cell(permissions)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.permissions.length }} permisos</router-link>
+                  <router-link v-if="data.item.permissions.length===1" class="relation" :to="{ name: 'RolePermissions', params: { alias: data.item.alias }}">{{ data.item.permissions.length }} permiso</router-link>
+                  <router-link v-else class="relation" :to="{ name: 'RolePermissions', params: { alias: data.item.alias }}">{{ data.item.permissions.length }} permisos</router-link>
               </template>
               <template v-slot:cell(users)="data">
-                  <LinkTable v-bind:item="data.item"/>
+                  <LinkTable v-bind:item="data.item" v-bind:href="{ name: 'RoleUsers', params: { alias: data.item.alias }}"/>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
               <template v-slot:cell(name)="data">
-                  <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">{{ data.value }}</a>
+                  <router-link class="fullname" :to="{ name: 'Role', params: { alias: data.item.alias }}">{{ data.value }}</router-link>
+              </template>
+              <template v-slot:cell(actions)="data">
+                  <router-link v-if="data.item.is_visible" :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-eye"></i></router-link>
+                  <router-link v-else :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-eye-slash"></i></router-link>
+                  <router-link :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-trash-alt"></i></router-link>
+                  <router-link :to="{ name: 'Role', params: { alias: data.item.alias }}"><i class="fas fa-cog"></i></router-link>
               </template>
           </b-table>
 
@@ -70,12 +78,13 @@
             return {
                 title: 'Roles',
                 roles: '0',
-                create_href: '/role/_new',
+                create_href: '/roles/_new',
                 filter: null,
                 fields: [
                     {
                         key: 'state',
                         label: 'Estado',
+                        class: 'text-center',
                         sortable: true,
                         formatter: (value) => {
                             switch (value.alias) {
@@ -130,23 +139,7 @@
                     },
                     {
                         key: 'actions',
-                        label: 'Acciones',
-                        formatter: (value, key, item) => {
-                            let html = ``;
-                            if (item.is_visible === true) {
-                                html += `<b-button v-b-tooltip.hover href="/${item.username}" title="Visible">
-                                            <i class="fas fa-eye"></i>
-                                         </b-button>`;
-                            } else {
-                                html += `<b-button v-b-tooltip.hover href="/${item.username}" title="No Visible">
-                                            <i class="fas fa-eye-slash"></i>
-                                         </b-button>`;
-                            }
-
-                            html += `<a href="/${item.username}"><i class="fas fa-trash-alt"></i></a>`;
-                            html += `<a href="/${item.username}"><i class="fas fa-cog"></i></a>`;
-                            return html;
-                        }
+                        label: 'Acciones'
                     }
                 ],
                 items: null
@@ -167,7 +160,7 @@
             },
             onFiltered(filteredItems) {
                 // Trigger pagination to update the number of buttons/pages due to filtering
-                this.users = filteredItems.length;
+                this.roles = filteredItems.length;
             }
         }
     }
@@ -202,6 +195,20 @@
                         right: 19px;
                         font-size: 20px;
                         color: #64a5af;
+                    }
+                }
+                a.btn-assign {
+                    background-color: #64a5af;
+                    color: white;
+                    width: 235px;
+                    display: flex;
+                    height: 45px;
+                    margin-right: 10px;
+                    align-items: center;
+                    justify-content: center;
+                    &:hover {
+                        text-decoration: none;
+                        background-color: #80c2cc;
                     }
                 }
                 .custom-select {

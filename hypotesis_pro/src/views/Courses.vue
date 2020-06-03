@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true" v-bind:create_href="create_href"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -60,7 +60,7 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_MANAGER_COURSE} from '../api/constants';
+    import {HYP_CONTEXT_COURSE} from '../api/constants';
 
     export default {
         name: 'Courses',
@@ -71,11 +71,13 @@
             return {
                 title: 'Cursos',
                 contexts: 0,
+                create_href: '/courses/_new',
                 filter: null,
                 fields: [
                     {
                         key: 'state',
                         label: 'Estado',
+                        class: 'text-center',
                         sortable: true,
                         formatter: (value) => {
                             switch (value.alias) {
@@ -83,6 +85,12 @@
                                     return `<i class="fas fa-check-circle"></i>`;
                                 case 'unactive':
                                     return `<i class="fas fa-minus-circle"></i>`;
+                                case 'finished':
+                                    return `<i class="fas fa-flag-checkered"></i>`;
+                                case 'creating':
+                                    return `<i class="fas fa-pencil-alt"></i>`;
+                                case 'paused':
+                                    return `<i class="fas fa-pause-circle"></i>`;
                             }
                         }
                     },
@@ -135,11 +143,10 @@
         },
         beforeMount () {
             this.axios
-                .get( HYP_MANAGER_COURSE + '?format=json')
+                .get( HYP_CONTEXT_COURSE + '?format=json')
                 .then(response => {
                     this.items = response.data;
                     this.contexts = response.data.length;
-                    console.log(response.data);
                 });
 
         },
@@ -250,9 +257,18 @@
                         color: #0190D8;
                         margin-right: 8px;
                     }
+                    &.fa-flag-checkered {
+                        color: #E9782D;
+                    }
+                    &.fa-pencil-alt {
+                        color: #1A9AD2;
+                    }
                     &.fa-eye-slash {
                         color: rgba(69, 69, 69, 0.18);
                         margin-right: 8px;
+                    }
+                    &.fa-pause-circle {
+                        color: #989898;
                     }
                     &.fa-trash-alt {
                         color: #FF0000;

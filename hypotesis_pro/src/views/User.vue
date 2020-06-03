@@ -4,6 +4,12 @@
       <ContainerHeaderApp v-bind:subtitle="role" v-bind:title="title" v-bind:list="false"/>
       <div class="container-view">
 
+          <b-modal ref="my-modal" hide-footer hide-header>
+              <div class="d-block text-center">
+                  <h3>{{ text_modal }}</h3>
+              </div>
+          </b-modal>
+
           <b-form @submit="onSubmit" v-if="show" class="hyp-form">
 
               <b-form-group id="input-group-1" label="Nombre:" label-for="input-1" class="hyp-group">
@@ -146,6 +152,7 @@
               </b-form-group>
 
               <div class="action_buttons">
+                  <router-link class="cancel" :to="{ name: 'Roles' }">Cancelar</router-link>
                   <b-button v-if="is_new" type="submit" variant="primary" class="hyp_submit">Crear</b-button>
                   <b-button v-else type="submit" variant="primary" class="hyp_submit">Editar</b-button>
               </div>
@@ -187,6 +194,7 @@
                 is_new: true,
                 title: 'Usuario',
                 role: '',
+                text_modal: '',
                 roles: [],
                 provinces: [],
                 languages: [],
@@ -228,7 +236,7 @@
                         this.form.surname1 = data.surname1;
                         this.form.surname2 = data.surname2;
                         this.form.username = data.username;
-                        this.form.password = '*******';
+                        this.form.password = data.password;
                         this.form.email = data.email;
                         this.form.role_id = data.role.alias;
                         this.form.address = data.address;
@@ -328,23 +336,44 @@
                     this.axios
                         .post(HYP_MANAGER_USER, this.form)
                         .then(response => {
-                            alert(JSON.stringify(response));
+                            console.log(response);
+                            this.text_modal = 'Se ha creado el usuario';
+                            this.$router.replace({ name: 'Users'});
+
                         })
                         .catch(error => {
-                            alert(JSON.stringify(error));
+                            console.log(error);
+                            this.text_modal = 'No se ha posido crear el usuario';
+                            this.showModal();
                         });
                 } else {
                     this.form.picture = this.image;
                     this.axios
                         .put(HYP_MANAGER_USER + this.username + '/', this.form)
                         .then(response => {
-                            alert(JSON.stringify(response));
+                            console.log(response);
+                            this.text_modal = 'Los cambios se han guardado';
+                            this.$router.replace({ name: 'Users'});
                         })
                         .catch(error => {
-                            alert(JSON.stringify(error));
+                            console.log(error);
+                            this.text_modal = 'Hubo un error en la petición';
+                            this.showModal();
                         });
                 }
 
+            },
+            showModal() {
+                this.$refs['my-modal'].show()
+            },
+            hideModal() {
+                this.$refs['my-modal'].hide();
+            },
+            toggleModal() {
+                // We pass the ID of the button that we want to return focus to
+                // when the modal has hidden
+                this.$refs['my-modal'].toggle('#toggle-btn');
+                this.$refs['my-modal'].hide();
             }
         }
     }
@@ -422,7 +451,7 @@
 
                 }
                 #input-group-8 {
-                    width: 980px;
+                    width: 978px;
                 }
                 .action_buttons {
                     display: flex;
@@ -432,8 +461,23 @@
                     > button.hyp_submit {
                         background-color: #64a5af;
                         border: none;
+                        z-index: 2;
                         &:hover {
                             background-color: #7dcad6;
+                        }
+                    }
+                    a.cancel {
+                        color: grey;
+                        background-color: #e8e8e8;
+                        padding: 6px 12px;
+                        font-size: 15px;
+                        border-radius: 7px;
+                        position: relative;
+                        left: 7px;
+                        z-index: 2;
+                        &:hover {
+                            text-decoration: none;
+                            background-color: #d1d1d1;
                         }
                     }
                 }

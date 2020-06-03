@@ -21,9 +21,11 @@
             <label class="label-config">
                 <i class="fas fa-cog"></i>
             </label>
-            <label class="label-logout">
-                <i class="fas fa-sign-out-alt"></i>
-            </label>
+            <router-link class="link_logout" to="/login">
+                <label class="label-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </label>
+            </router-link>
         </div>
         <div class="grey_stripe right"></div>
     </header>
@@ -152,11 +154,17 @@
                 font-size: 27px;
                 color: #CECECE;
             }
+            a.link_logout {
+                color: inherit;
+                text-decoration: none;
+                cursor: pointer;
+            }
             .label-logout {
                 height: 45px;
                 display: flex;
                 align-items: center;
                 margin-right: 12px;
+                cursor: pointer;
                 .fas {
                     font-size: 35px;
                 }

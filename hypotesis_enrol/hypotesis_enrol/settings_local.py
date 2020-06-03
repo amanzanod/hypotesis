@@ -25,11 +25,11 @@ SECRET_KEY = 'c0r3ou18i&z)icy$hj1z6xyii)cz4$2mt8vvztbh5_4y$=4pc@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.environ.get('HYP_LOCAL_IP', '')]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # CORS
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
@@ -93,12 +93,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hypotesis_enrol',
         'USER': 'hypotesis',
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD', ''),
-        'HOST': os.environ.get('HYP_DB_IP', ''),
-        'PORT': os.environ.get('HYP_DB_PORT', ''),
-    }
+        'PASSWORD': '1234',
+        'HOST': '192.168.99.100',
+        'PORT': '3306',
+    },
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
