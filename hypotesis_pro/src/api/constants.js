@@ -19,9 +19,9 @@ if (HYP_MANAGER_URL) {
 }
 
 if (HYP_CONTEXT_URL) {
-    context_url = 'http://' + HYP_MANAGER_URL + '/api/';
+    context_url = 'http://' + HYP_CONTEXT_URL + '/api/';
 } else {
-    context_url = 'http://192.168.99.100:8001/api/';
+    context_url = 'http://127.0.0.1:8001/api/';
 }
 
 const HYP_MANAGER_USER = manager_url + 'user/';
@@ -39,6 +39,10 @@ const HYP_CONTEXT_MASTER = context_url + 'master/';
 const HYP_CONTEXT_COURSE = context_url + 'course/';
 const HYP_CONTEXT_CLASSROOM = context_url + 'classroom/';
 const HYP_CONTEXT_CATEGORY = context_url + 'category/';
+const HYP_CONTEXT_STATE = context_url + 'state/';
+const HYP_CONTEXT_FORMAT = context_url + 'format/';
+const HYP_CONTEXT_LANGUAGE = context_url + 'language/';
+const HYP_CONTEXT_LEVEL = context_url + 'level/';
 
 export {
     HYP_MANAGER_USER,
@@ -54,5 +58,9 @@ export {
     HYP_CONTEXT_COURSE,
     HYP_CONTEXT_CLASSROOM,
     HYP_CONTEXT_CATEGORY,
-    HYP_MANAGER_ROLEPERMISSION
+    HYP_MANAGER_ROLEPERMISSION,
+    HYP_CONTEXT_STATE,
+    HYP_CONTEXT_FORMAT,
+    HYP_CONTEXT_LANGUAGE,
+    HYP_CONTEXT_LEVEL
 };

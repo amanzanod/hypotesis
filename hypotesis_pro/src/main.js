@@ -25,7 +25,6 @@ import bimg from 'bootstrap-vue/esm/components/image/img';
 
 Vue.config.productionTip = false;
 Vue.prototype.$menu = {collapsed:false};
-Vue.prototype.$user = {username:false};
 
 // Instal VueAXIOS
 Vue.use(VueAxios, axios);

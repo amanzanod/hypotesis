@@ -43,11 +43,12 @@ class CategorySerializer(serializers.ModelSerializer):
     context_type = ContextTypeSerializer(many=False, read_only=True)
     context_type_id = serializers.PrimaryKeyRelatedField(write_only=True,
                                                          queryset=ContextType.objects.all(), source='context_type')
-    parent = serializers.StringRelatedField(many=False, read_only=True)
-    parent_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Category.objects.all(), source='category')
+    parent_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source='category', required=False)
     state = StateSerializer(many=False, read_only=True)
     state_id = serializers.PrimaryKeyRelatedField(write_only=True,
                                                   queryset=State.objects.all(), source='state')
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
+    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
 
     # Meta.
     class Meta:
@@ -76,9 +77,7 @@ class ContextSerializer(serializers.ModelSerializer):
     level = LevelSerializer(many=False, read_only=True)
     level_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Level.objects.all(), source='level'
                                                   , required=False)
-    parent = serializers.StringRelatedField(many=False, read_only=True)
-    parent_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Context.objects.all(),
-                                                   source='context', required=False)
+    parent_id = serializers.PrimaryKeyRelatedField(queryset=Context.objects.all(), source='context', required=False)
     language = LanguageSerializer(many=False, read_only=True)
     language_id = serializers.PrimaryKeyRelatedField(write_only=True,
                                                      queryset=Language.objects.all(), source='language')

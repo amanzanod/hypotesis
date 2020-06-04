@@ -256,6 +256,12 @@ class RoleViewSet(viewsets.ModelViewSet):
         serializer = UserManagerSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    @action(detail=True, methods=['get'])
+    def permissions(self, request, pk=None):
+        queryset = PermissionRole.objects.filter(role=pk)
+        serializer = PermissionRoleSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     # Create.
     def create(self, request):
         serializer = RoleSerializer(data=request.data)

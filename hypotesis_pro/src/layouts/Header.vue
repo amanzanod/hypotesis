@@ -21,11 +21,9 @@
             <label class="label-config">
                 <i class="fas fa-cog"></i>
             </label>
-            <router-link class="link_logout" to="/login">
-                <label class="label-logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </label>
-            </router-link>
+            <label class="label-logout" v-on:click="logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </label>
         </div>
         <div class="grey_stripe right"></div>
     </header>
@@ -38,6 +36,12 @@
         computed: {
             currentRouteName() {
                 return this.$route.meta ? null : this.$route.meta;
+            }
+        },
+        methods: {
+            logout() {
+                localStorage.setItem("username", false);
+                this.$router.replace({ name: 'Login'});
             }
         }
     }
@@ -153,11 +157,6 @@
                 justify-content: center;
                 font-size: 27px;
                 color: #CECECE;
-            }
-            a.link_logout {
-                color: inherit;
-                text-decoration: none;
-                cursor: pointer;
             }
             .label-logout {
                 height: 45px;

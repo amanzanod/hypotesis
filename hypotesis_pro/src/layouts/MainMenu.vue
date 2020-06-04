@@ -126,7 +126,13 @@
         },
         beforeCreate () {
             this.is_collapsed = this.$menu.collapsed;
-            this.user = this.$user.username ? this.$user.username : 'amanzanod';
+            this.user = localStorage.getItem("username");
+
+            if (this.user === 'false') {
+                this.$router.replace({ name: 'Login'});
+            }
+
+
         },
         beforeMount () {
             this.axios

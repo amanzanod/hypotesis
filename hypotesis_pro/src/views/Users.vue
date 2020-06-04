@@ -48,6 +48,12 @@
                       </div>
                   </div>
               </template>
+              <template v-slot:cell(actions)="data">
+                  <router-link v-if="data.item.is_visible" :to="{ name: 'User', params: { username: data.item.username }}"><i class="fas fa-eye"></i></router-link>
+                  <router-link v-else :to="{ name: 'User', params: { username: data.item.username }}"><i class="fas fa-eye-slash"></i></router-link>
+                  <router-link :to="{ name: 'User', params: { username: data.item.username }}"><i class="fas fa-trash-alt"></i></router-link>
+                  <router-link :to="{ name: 'User', params: { username: data.item.username }}"><i class="fas fa-cog"></i></router-link>
+              </template>
           </b-table>
 
 
@@ -137,23 +143,7 @@
                     },
                     {
                         key: 'actions',
-                        label: 'Acciones',
-                        formatter: (value, key, item) => {
-                            let html = ``;
-                            if (item.is_visible === true) {
-                                html += `<b-button v-b-tooltip.hover href="/${item.username}" title="Visible">
-                                            <i class="fas fa-eye"></i>
-                                         </b-button>`;
-                            } else {
-                                html += `<b-button v-b-tooltip.hover href="/${item.username}" title="No Visible">
-                                            <i class="fas fa-eye-slash"></i>
-                                         </b-button>`;
-                            }
-
-                            html += `<a href="/${item.username}"><i class="fas fa-trash-alt"></i></a>`;
-                            html += `<a href="/${item.username}"><i class="fas fa-cog"></i></a>`;
-                            return html;
-                        }
+                        label: 'Acciones'
                     }
                 ],
                 items: null

@@ -79,8 +79,8 @@
                 fetch( HYP_MANAGER_USER + this.form.username + '/login/', requestOptions)
                     .then(response =>  {
                         if (response.status === 202) {
-                            this.$user.username = this.form.username;
-                            this.$router.push('users')
+                            localStorage.setItem("username", this.form.username);
+                            this.$router.replace({ name: 'Users'});
                         } else {
                             console.log(response);
                             this.showModal();

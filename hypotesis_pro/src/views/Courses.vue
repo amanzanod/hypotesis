@@ -14,6 +14,7 @@
                   ></b-form-input>
                   <span class="search_input"><i class="fas fa-search"></i></span>
               </div>
+              <b-form-select v-model="filter" :options="categories_options"></b-form-select>
               <span class="filter_options"><i class="fas fa-filter"></i></span>
           </div>
 
@@ -33,20 +34,21 @@
               <template v-slot:cell(icon)="icon">
                   <span v-html="icon.value"></span>
               </template>
-              <template v-slot:cell(roles)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.permissions.length }} permisos</router-link>
-              </template>
               <template v-slot:cell(category)="value">
                   <router-link class="relation" to="data">{{value.item.category.name}}</router-link>
               </template>
-              <template v-slot:cell(users)="item">
-                  <router-link class="relation" to="data">Matricular {{item.alias}}</router-link>
+              <template v-slot:cell(users)="data">
+                  <router-link class="relation" :to="data">Matricular</router-link>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
               <template v-slot:cell(name)="data">
-                  <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">{{ data.value }}</a>
+                  <router-link :to="{ name: 'Course', params: { alias: data.item.alias }}">{{ data.value }}</router-link>
+              </template>
+              <template v-slot:cell(actions)="data">
+                  <router-link :to="{ name: 'Course', params: { alias: data.item.alias }}"><i class="fas fa-trash-alt"></i></router-link>
+                  <router-link :to="{ name: 'Course', params: { alias: data.item.alias }}"><i class="fas fa-cog"></i></router-link>
               </template>
           </b-table>
 
@@ -60,7 +62,7 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_CONTEXT_COURSE} from '../api/constants';
+    import {HYP_CONTEXT_COURSE, HYP_CONTEXT_CATEGORY} from '../api/constants';
 
     export default {
         name: 'Courses',
@@ -73,6 +75,7 @@
                 contexts: 0,
                 create_href: '/courses/_new',
                 filter: null,
+                categories_options: [],
                 fields: [
                     {
                         key: 'state',
@@ -130,12 +133,7 @@
                     },
                     {
                         key: 'actions',
-                        label: 'Acciones',
-                        formatter: (value, key, item) => {
-                            let html = ``;
-                            html += `<a href="/${item.username}"><i class="fas fa-cog"></i></a>`;
-                            return html;
-                        }
+                        label: 'Acciones'
                     }
                 ],
                 items: null
@@ -147,6 +145,25 @@
                 .then(response => {
                     this.items = response.data;
                     this.contexts = response.data.length;
+                });
+            this.axios
+                .get( HYP_CONTEXT_CATEGORY + 'course/filter/?format=json')
+                .then(response => {
+                    const data = response.data;
+                    const options = [
+                        { value: null, text: 'Todas las categorías' }
+                    ];
+
+                    data.forEach(element => {
+                        let option = {
+                            value: element.alias,
+                            text: element.name,
+                            disabled: element.state.alias !== 'active'
+                        };
+                        options.push(option);
+                    });
+
+                    this.categories_options = options;
                 });
 
         },

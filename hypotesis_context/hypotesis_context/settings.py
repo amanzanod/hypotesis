@@ -25,11 +25,11 @@ SECRET_KEY = 'cgncni20&w&s)u69ho!0#myl9&ic%&f+zv6%1ez$mc_9qmv5lm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.environ.get('HYP_LOCAL_IP', '')]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # CORS
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
@@ -92,9 +92,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hypotesis_context',
         'USER': 'hypotesis',
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD', ''),
-        'HOST': os.environ.get('HYP_DB_IP', ''),
-        'PORT': os.environ.get('HYP_DB_PORT', ''),
+        'PASSWORD': '1234',
+        'HOST': '192.168.99.100',
+        'PORT': '3306',
     },
 }
 
@@ -121,8 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'es-es'
-LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
@@ -140,3 +139,6 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+

@@ -30,20 +30,21 @@
               <template v-slot:cell(state)="state">
                   <span v-html="state.value"></span>
               </template>
-              <template v-slot:cell(icon)="icon">
-                  <span v-html="icon.value"></span>
-              </template>
-              <template v-slot:cell(roles)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.permissions.length }} permisos</router-link>
+              <template v-slot:cell(parent)="data">
+                  <RelationTable v-bind:course="data.item.parent"/>
               </template>
               <template v-slot:cell(users)="data">
-                  <router-link class="relation" to="data">Matricular en {{data.item.name}}</router-link>
+                  <router-link class="relation" :to="data">Matricular</router-link>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
               <template v-slot:cell(name)="data">
-                  <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">{{ data.value }}</a>
+                  <router-link :to="{ name: 'Classroom', params: { alias: data.item.alias }}">{{ data.value }}</router-link>
+              </template>
+              <template v-slot:cell(actions)="data">
+                  <router-link :to="{ name: 'Classroom', params: { alias: data.item.alias }}"><i class="fas fa-trash-alt"></i></router-link>
+                  <router-link :to="{ name: 'Classroom', params: { alias: data.item.alias }}"><i class="fas fa-cog"></i></router-link>
               </template>
           </b-table>
 
@@ -58,11 +59,12 @@
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
     import {HYP_CONTEXT_CLASSROOM} from '../api/constants';
+    import RelationTable from '@/layouts/table/RelationTable.vue';
 
     export default {
         name: 'Classrooms',
         components: {
-            ContainerHeaderApp
+            ContainerHeaderApp, RelationTable
         },
         data() {
             return {
@@ -92,20 +94,20 @@
                         }
                     },
                     {
-                        key: 'parent',
-                        label: 'curso',
-                        class: 'text-left',
-                        sortable: true
-                    },
-                    {
                         key: 'name',
-                        label: 'nombre',
+                        label: 'Nombre',
                         class: 'text-left',
                         sortable: true
                     },
                     {
                         key: 'alias',
                         label: 'Alias',
+                        class: 'text-left',
+                        sortable: true
+                    },
+                    {
+                        key: 'parent',
+                        label: 'Curso',
                         class: 'text-left',
                         sortable: true
                     },
@@ -128,12 +130,7 @@
                     },
                     {
                         key: 'actions',
-                        label: 'Acciones',
-                        formatter: (value, key, item) => {
-                            let html = ``;
-                            html += `<a href="/${item.username}"><i class="fas fa-cog"></i></a>`;
-                            return html;
-                        }
+                        label: 'Acciones'
                     }
                 ],
                 items: null
@@ -226,6 +223,9 @@
                 border: 1px solid #DFDFDF;
                 &:nth-of-type(odd) {
                     background-color: rgba(0, 0, 0, 0.02);
+                }
+                td {
+                    padding: 10px;
                 }
                 a{
                     color: #64A5AF;

@@ -41,12 +41,6 @@
               <template v-slot:cell(icon)="icon">
                   <span v-html="icon.value"></span>
               </template>
-              <template v-slot:cell(roles)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.roles.length }} roles</router-link>
-              </template>
-              <template v-slot:cell(users)="data">
-                  <LinkTable v-bind:item="data.item"/>
-              </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
@@ -71,14 +65,12 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_MANAGER_PERMISSION, HYP_MANAGER_CONTEXT, HYP_MANAGER_ROLE} from '../api/constants';
-
-    import LinkTable from '@/layouts/table/LinkTable.vue';
+    import {HYP_MANAGER_CONTEXT, HYP_MANAGER_ROLE} from '../api/constants';
 
     export default {
         name: 'RolePermissions',
         components: {
-            ContainerHeaderApp, LinkTable
+            ContainerHeaderApp
         },
         data() {
             return {
@@ -131,16 +123,6 @@
                         sortable: true
                     },
                     {
-                        key: 'roles',
-                        label: 'Roles',
-                        class: 'text-center'
-                    },
-                    {
-                        key: 'users',
-                        label: 'Usuarios',
-                        class: 'text-center'
-                    },
-                    {
                         key: 'actions',
                         label: 'Acciones'
                     }
@@ -152,9 +134,16 @@
 
             this.role = this.$route.params.alias;
             this.axios
-                .get( HYP_MANAGER_PERMISSION + this.$route.params.alias + '/?format=json')
+                .get( HYP_MANAGER_ROLE + this.$route.params.alias + '/permissions/?format=json')
                 .then(response => {
-                    this.items = response.data;
+                    let data = response.data;
+                    let permissions = [];
+
+                    data.forEach(element => {
+                        permissions.push(element.permission);
+                    });
+
+                    this.items = permissions;
                     this.permissions = response.data.length + '';
                 });
             this.axios

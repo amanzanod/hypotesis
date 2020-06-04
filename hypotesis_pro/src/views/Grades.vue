@@ -34,20 +34,21 @@
               <template v-slot:cell(icon)="icon">
                   <span v-html="icon.value"></span>
               </template>
-              <template v-slot:cell(roles)="data">
-                  <router-link class="relation" to="`/applications/${data.item.alias}`">{{ data.item.permissions.length }} permisos</router-link>
-              </template>
               <template v-slot:cell(users)="data">
-                  <router-link class="relation" to="data">Matricular en {{data.item.name}}</router-link>
+                  <router-link class="relation" :to="data">Matricular</router-link>
               </template>
               <template v-slot:cell(category)="data">
-                  <router-link class="relation" to="data">{{data.item.category.name}}</router-link>
+                  <router-link class="relation" :to="{ name: 'Category', params: { alias: data.item.category.alias }}">{{data.item.category.name}}</router-link>
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
               <template v-slot:cell(name)="data">
-                  <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">{{ data.value }}</a>
+                  <router-link :to="{ name: 'Grade', params: { alias: data.item.alias }}">{{ data.value }}</router-link>
+              </template>
+              <template v-slot:cell(actions)="data">
+                  <router-link :to="{ name: 'Grade', params: { alias: data.item.alias }}"><i class="fas fa-trash-alt"></i></router-link>
+                  <router-link :to="{ name: 'Grade', params: { alias: data.item.alias }}"><i class="fas fa-cog"></i></router-link>
               </template>
           </b-table>
 
@@ -73,7 +74,6 @@
                 title: 'Grados',
                 contexts: 0,
                 create_href: '/grades/_new',
-                class: 'text-center',
                 filter: null,
                 categories_options: [],
                 fields: [
@@ -92,6 +92,8 @@
                                     return `<i class="fas fa-flag-checkered"></i>`;
                                 case 'paused':
                                     return `<i class="fas fa-pause-circle"></i>`;
+                                case 'creating':
+                                    return `<i class="fas fa-pencil-alt"></i>`;
                             }
                         }
                     },
@@ -131,12 +133,7 @@
                     },
                     {
                         key: 'actions',
-                        label: 'Acciones',
-                        formatter: (value, key, item) => {
-                            let html = ``;
-                            html += `<a href="/${item.username}"><i class="fas fa-cog"></i></a>`;
-                            return html;
-                        }
+                        label: 'Acciones'
                     }
                 ],
                 items: null
@@ -150,7 +147,7 @@
                     this.contexts = response.data.length;
                 });
             this.axios
-                .get( HYP_CONTEXT_CATEGORY + '?format=json')
+                .get( HYP_CONTEXT_CATEGORY + 'grade/filter/?format=json')
                 .then(response => {
                     const data = response.data;
                     const options = [

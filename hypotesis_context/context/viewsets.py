@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.forms.models import model_to_dict
 from django.utils import timezone
+from rest_framework.decorators import action
 
 from .models import Context, ContextType, Category, Format, State, Level, Language
 from .serializer import ContextSerializer, ContextTypeSerializer, CategorySerializer, FormatSerializer, \
@@ -35,6 +36,7 @@ def create_context(serializer):
             }
         }, status=status.HTTP_201_CREATED)
     else:
+        print(str(serializer.errors))
         return Response({
             'success': False,
             'errors': serializer.errors
@@ -355,6 +357,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def create(self, request):
         serializer = CategorySerializer(data=request.data)
         return create_generic(serializer)
+
+    @action(detail=True, methods=['get'])
+    def filter(self, request, pk=None):
+        queryset = Category.objects.filter(context_type=pk)
+        serializer = CategorySerializer(queryset, many=True)
+        return Response(serializer.data)
 
     # Update.
     def update(self, request, pk=None):

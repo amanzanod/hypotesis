@@ -89,10 +89,22 @@ Vue.use(VueRouter);
       component: () => import('../views/Grades.vue')
   },
   {
+      path: '/grades/:alias',
+      name: 'Grade',
+      meta: 'Grado',
+      component: () => import('../views/Grade.vue')
+  },
+  {
       path: '/masters',
       name: 'Masters',
       meta: 'Másters',
       component: () => import('../views/Masters.vue')
+  },
+  {
+      path: '/masters/:alias',
+      name: 'Master',
+      meta: 'Máster',
+      component: () => import('../views/Master.vue')
   },
   {
       path: '/courses',
@@ -101,16 +113,34 @@ Vue.use(VueRouter);
       component: () => import('../views/Courses.vue')
   },
   {
+      path: '/courses/:alias',
+      name: 'Course',
+      meta: 'Curso',
+      component: () => import('../views/Course.vue')
+  },
+  {
       path: '/classrooms',
       name: 'Classrooms',
       meta: 'Aulas',
       component: () => import('../views/Classrooms.vue')
   },
   {
+      path: '/classrooms/:alias',
+      name: 'Classroom',
+      meta: 'Aula',
+      component: () => import('../views/Classroom.vue')
+  },
+  {
       path: '/categories',
       name: 'Categories',
       meta: 'Categorías',
       component: () => import('../views/Categories.vue')
+  },
+  {
+      path: '/categories/:alias',
+      name: 'Category',
+      meta: 'Categoría',
+      component: () => import('../views/Category.vue')
   },
   {
       path: '/notifications',

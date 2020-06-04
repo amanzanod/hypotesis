@@ -14,6 +14,7 @@
                   ></b-form-input>
                   <span class="search_input"><i class="fas fa-search"></i></span>
               </div>
+              <b-form-select v-model="filter" :options="contexts_options"></b-form-select>
               <span class="filter_options"><i class="fas fa-filter"></i></span>
           </div>
 
@@ -31,17 +32,19 @@
                   <span v-html="state.value"></span>
               </template>
               <template v-slot:cell(context_type)="data">
-                  <router-link class="relation" to="data">{{data.item.context_type.name}}</router-link>
+                  {{data.item.context_type.name}}
               </template>
               <template v-slot:cell(actions)="actions">
                   <span v-html="actions.value"></span>
               </template>
               <template v-slot:cell(name)="data">
-                  <a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">{{ data.value }}</a>
+                  <router-link :to="{ name: 'Category', params: { alias: data.item.alias }}">{{ data.value }}</router-link>
+              </template>
+              <template v-slot:cell(actions)="data">
+                  <router-link :to="{ name: 'Category', params: { alias: data.item.alias }}"><i class="fas fa-trash-alt"></i></router-link>
+                  <router-link :to="{ name: 'Category', params: { alias: data.item.alias }}"><i class="fas fa-cog"></i></router-link>
               </template>
           </b-table>
-
-
 
       </div>
   </div>
@@ -51,7 +54,7 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_CONTEXT_CATEGORY} from '../api/constants';
+    import {HYP_CONTEXT_CATEGORY, HYP_MANAGER_CONTEXT} from '../api/constants';
 
     export default {
         name: 'Categories',
@@ -64,6 +67,7 @@
                 contexts: 0,
                 create_href: '/categories/_new',
                 filter: null,
+                contexts_options: [],
                 fields: [
                     {
                         key: 'state',
@@ -139,6 +143,24 @@
                     this.items = response.data;
                     this.contexts = response.data.length;
                 });
+            this.axios
+                .get( HYP_MANAGER_CONTEXT + '?format=json')
+                .then(response => {
+                    const data = response.data;
+                    const options = [
+                        { value: null, text: 'Todas los contextos' }
+                    ];
+
+                    data.forEach(element => {
+                        let option = {
+                            value: element.alias,
+                            text: element.name,
+                        };
+                        options.push(option);
+                    });
+
+                    this.contexts_options = options;
+                });
 
         },
         methods: {
@@ -147,7 +169,6 @@
                 if (item.is_visible === false) return 'text-muted';
             },
             onFiltered(filteredItems) {
-                // Trigger pagination to update the number of buttons/pages due to filtering
                 this.users = filteredItems.length;
             }
         }
