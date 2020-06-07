@@ -241,9 +241,11 @@ def add_users(apps, schema_editor):
     state_unactive = state.objects.get(alias='unactive')
     language = apps.get_model('manager', 'Language')
     language_es = language.objects.get(code='es')
+    language_en = language.objects.get(code='en')
     role = apps.get_model('manager', 'Role')
     role_student = role.objects.get(alias='student')
-    role_teacher = role.objects.get(alias='teacherpro')
+    role_teacherpro = role.objects.get(alias='teacherpro')
+    role_teacher = role.objects.get(alias='teacher')
     role_author = role.objects.get(alias='author')
     role_secretary = role.objects.get(alias='secretary')
     province = apps.get_model('manager', 'Province')
@@ -259,67 +261,145 @@ def add_users(apps, schema_editor):
                        name='Antonio', surname1='Manzano', surname2='Díaz', title='Creador Multimedia',
                        email='amanzanod@uoc.edu', province=province_madrid, country=country_es,
                        role=role_student, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(),)
+                       state_at=timezone.now(), picture='profile/amanzanod.png')
     user_object.save()
-    user_object = user(username='mmata', password='12345', state=state_active, is_visible=True,
-                       name='Marco', surname1='Mata', surname2='García', title='Programador PHP',
+    user_object = user(username='mamaga', password='12345', state=state_active, is_visible=True,
+                       name='María', surname1='Mata', surname2='García', title='Programador PHP',
                        email='marco@hypotesis.com', province=province_barcelona, country=country_es,
                        role=role_student, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(),)
+                       state_at=timezone.now(), picture='profile/mamaga.png')
     user_object.save()
-    user_object = user(username='rgomeza', password='12345', state=state_active, is_visible=True,
+    user_object = user(username='rogoag', password='12345', state=state_active, is_visible=True,
                        name='Roberto', surname1='Gómez', surname2='Aguado', title='Creador Multimedia',
                        email='rga@hypotesis.com', province=province_barcelona, country=country_es,
                        role=role_student, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(),)
+                       state_at=timezone.now(), picture='profile/rogoag.png')
     user_object.save()
-    user_object = user(username='julisanz', password='12345', state=state_active, is_visible=True,
+    user_object = user(username='jusagu', password='12345', state=state_active, is_visible=True,
                        name='Julieta', surname1='Sanz', surname2='Guardiola', title='Desarrollador Front',
                        email='julsanz@hypotesis.com', province=province_sevilla, country=country_es,
-                       role=role_teacher, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(),)
+                       role=role_teacherpro, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/jusagu.png')
     user_object.save()
-    user_object = user(username='juanagarcia', password='12345', state=state_active, is_visible=True,
+    user_object = user(username='jugamo', password='12345', state=state_active, is_visible=True,
                        name='Juana', surname1='García', surname2='Moreno', title='Psicopedagogo',
                        email='jugamor@hypotesis.com', province=province_madrid, country=country_es,
                        role=role_author, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(),)
+                       state_at=timezone.now(), picture='profile/jugamo.png')
     user_object.save()
-    user_object = user(username='patrimar', password='12345', state=state_active, is_visible=True,
+    user_object = user(username='pamaso', password='12345', state=state_active, is_visible=True,
                        name='Patricia', surname1='Martínez', surname2='Soler', title='Graduado ADE',
                        email='pamasol@hypotesis.com', province=province_madrid, country=country_es,
                        role=role_secretary, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(),)
+                       state_at=timezone.now(), picture='profile/pamaso.png')
     user_object.save()
-    user_object = user(username='david78', password='12345', state=state_active, is_visible=True,
+    user_object = user(username='dapisa', password='12345', state=state_active, is_visible=True,
                        name='David', surname1='Pinilla', surname2='Sala', title='Diseñador Gráfico',
                        email='david78@hypotesis.com', province=province_madrid, country=country_es,
                        role=role_student, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(),)
+                       state_at=timezone.now(), picture='profile/dapisa.png')
     user_object.save()
-    user_object = user(username='sxsor', password='12345', state=state_unactive, is_visible=False,
+    user_object = user(username='sijiso', password='12345', state=state_unactive, is_visible=False,
                        name='Silvia', surname1='Jiménez', surname2='Soriano', title='Diseñador Gráfico',
                        email='sxsor@hypotesis.com', province=province_barcelona, country=country_es,
                        role=role_student, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(),)
+                       state_at=timezone.now(), picture='profile/sijiso.png')
     user_object.save()
-    user_object = user(username='mgarciar', password='12345', state=state_active, is_visible=True,
+    user_object = user(username='masaro', password='12345', state=state_active, is_visible=True,
                        name='Mario', surname1='García', surname2='Rodriguez', title='Software Developer',
                        email='devil29@hypotesis.com', province=province_madrid, country=country_es,
-                       role=role_teacher, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(),)
+                       role=role_teacherpro, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/masaro.png')
     user_object.save()
-    user_object = user(username='rebemolina', password='12345', state=state_unactive, is_visible=True,
+    user_object = user(username='remomo', password='12345', state=state_unactive, is_visible=True,
                        name='Rebeca', surname1='Molina', surname2='Montoro', title='Programador Python',
                        email='rebex29@hypotesis.com', province=province_sevilla, country=country_es,
                        role=role_student, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(),)
+                       state_at=timezone.now(), picture='profile/remomo.png')
     user_object.save()
-    user_object = user(username='jomorese', password='12345', state=state_unactive, is_visible=True,
+    user_object = user(username='jomose', password='12345', state=state_unactive, is_visible=True,
                        name='José', surname1='Moreno', surname2='Sevilla', title='Diseñador Gráfico',
                        email='jose.moreno@hypotesis.com', province=province_madrid, country=country_es,
                        role=role_student, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(),)
+                       state_at=timezone.now(), picture='profile/jomose.png')
+    user_object.save()
+    user_object = user(username='capeto', password='12345', state=state_unactive, is_visible=True,
+                       name='Carmen', surname1='Pérez', surname2='Toledo', title='Programador Python',
+                       email='capeto@hypotesis.com', province=province_madrid, country=country_es,
+                       role=role_student, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/capeto.png')
+    user_object.save()
+    user_object = user(username='sosulo', password='12345', state=state_unactive, is_visible=True,
+                       name='Sonia', surname1='Suárez', surname2='López', title='Programador PHP',
+                       email='sosulo@hypotesis.com', province=province_madrid, country=country_es,
+                       role=role_student, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/sosulo.png')
+    user_object.save()
+    user_object = user(username='tallome', password='12345', state=state_unactive, is_visible=True,
+                       name='Tania', surname1='Llorente', surname2='Mena', title='Desarrollador Web',
+                       email='tallome@hypotesis.com', province=province_madrid, country=country_es,
+                       role=role_student, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/tallome.png')
+    user_object.save()
+    user_object = user(username='ancrune', password='12345', state=state_unactive, is_visible=True,
+                       name='Antonio', surname1='Cruz', surname2='Nevado', title='JavaScript Developer',
+                       email='ancrune@hypotesis.com', province=province_madrid, country=country_es,
+                       role=role_student, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/ancrune.png')
+    user_object.save()
+    user_object = user(username='masago', password='12345', state=state_unactive, is_visible=True,
+                       name='Marta', surname1='Sánchez', surname2='Gómez', title='Diseñador Gráfico',
+                       email='masago@hypotesis.com', province=province_sevilla, country=country_es,
+                       role=role_student, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/masago.png')
+    user_object.save()
+    user_object = user(username='jusica', password='12345', state=state_unactive, is_visible=True,
+                       name='Juan Pablo', surname1='Sierra', surname2='Del Campo', title='Creador Multimedia',
+                       email='jusica@hypotesis.com', province=province_valencia, country=country_es,
+                       role=role_student, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/jusica.png')
+    user_object.save()
+    user_object = user(username='moseig', password='12345', state=state_unactive, is_visible=True,
+                       name='Mónica', surname1='Serena', surname2='Iglesias', title='Programador Python',
+                       email='moseig@hypotesis.com', province=province_valencia, country=country_es,
+                       role=role_student, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/moseig.png')
+    user_object.save()
+    user_object = user(username='blafega', password='12345', state=state_unactive, is_visible=True,
+                       name='Blanca', surname1='Fernández', surname2='García', title='Backend Developer',
+                       email='blafega@hypotesis.com', province=province_valencia, country=country_es,
+                       role=role_teacherpro, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/blafega.png')
+    user_object.save()
+    user_object = user(username='madiji', password='12345', state=state_unactive, is_visible=True,
+                       name='Marco', surname1='Díaz', surname2='Jimenez', title='Software Architect',
+                       email='madiji@hypotesis.com', province=province_valencia, country=country_es,
+                       role=role_teacher, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/madiji.png')
+    user_object.save()
+    user_object = user(username='roguma', password='12345', state=state_unactive, is_visible=True,
+                       name='Rocío', surname1='Gutierrez', surname2='Martín', title='Experta Pedagógica',
+                       email='roguma@hypotesis.com', province=province_madrid, country=country_es,
+                       role=role_author, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/roguma.png')
+    user_object.save()
+    user_object = user(username='mamofe', password='12345', state=state_unactive, is_visible=True,
+                       name='Martín', surname1='Moreno', surname2='Fernández', title='Creador de Contenidos',
+                       email='mamofe@hypotesis.com', province=province_madrid, country=country_es,
+                       role=role_author, language=language_es, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/mamofe.png')
+    user_object.save()
+    user_object = user(username='mismi', password='12345', state=state_unactive, is_visible=True,
+                       name='Michael', surname1='Smith', surname2='', title='Python Master',
+                       email='mismi@hypotesis.com', province=province_madrid, country=country_es,
+                       role=role_teacher, language=language_en, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/mismi.png')
+    user_object.save()
+    user_object = user(username='stema', password='12345', state=state_unactive, is_visible=True,
+                       name='Steve', surname1='Marion', surname2='', title='HTML5 LAYOUT',
+                       email='stema@hypotesis.com', province=province_madrid, country=country_es,
+                       role=role_student, language=language_en, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/stema.png')
     user_object.save()
 
 
