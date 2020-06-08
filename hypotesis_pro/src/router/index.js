@@ -131,6 +131,30 @@ Vue.use(VueRouter);
       component: () => import('../views/Classroom.vue')
   },
   {
+      path: '/classrooms/:alias/enrol',
+      name: 'ClassroomEnrol',
+      meta: 'Matriculación en Aula',
+      component: () => import('../views/ClassroomEnrol.vue')
+  },
+  {
+      path: '/course/:alias/enrol',
+      name: 'CourseEnrol',
+      meta: 'Matriculación en Curso',
+      component: () => import('../views/CourseEnrol.vue')
+  },
+  {
+      path: '/grade/:alias/enrol',
+      name: 'GradeEnrol',
+      meta: 'Matriculación en Grado',
+      component: () => import('../views/GradeEnrol.vue')
+  },
+  {
+      path: '/master/:alias/enrol',
+      name: 'MasterEnrol',
+      meta: 'Matriculación en Máster',
+      component: () => import('../views/MasterEnrol.vue')
+  },
+  {
       path: '/categories',
       name: 'Categories',
       meta: 'Categorías',

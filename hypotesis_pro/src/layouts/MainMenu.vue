@@ -130,6 +130,8 @@
 
             if (this.user === 'false') {
                 this.$router.replace({ name: 'Login'});
+            } else if (this.user === null) {
+                this.$router.replace({ name: 'Login'});
             }
 
 

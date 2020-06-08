@@ -18,7 +18,7 @@ class EnrolContextSerializer(serializers.ModelSerializer):
     # Meta.
     class Meta:
         model = EnrolContext
-        fields = ('user', 'context', 'role', 'state', 'state_id', 'state_at')
+        fields = ('id', 'user', 'context', 'role', 'state', 'state_id', 'state_at')
         extra_kwargs = {
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True}

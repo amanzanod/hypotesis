@@ -145,7 +145,7 @@ services:
       - hypotesis_django
       - hypotesis_db
 
-   ## HYPOTESIS PRO
+  ## HYPOTESIS PRO
   hypotesis_pro:
     build: hypotesis_pro/.
     container_name: hypotesis_pro
@@ -164,6 +164,33 @@ services:
     volumes:
       - ./hypotesis_pro/nginx.conf:/etc/nginx/nginx.conf
       - ./hypotesis_pro/default.conf:/etc/nginx/conf.d/default.conf
+    stdin_open: true
+    tty: true
+    depends_on:
+      - hypotesis_manager
+      - hypotesis_context
+      - hypotesis_enrol
+      - hypotesis_item
+      
+  ## HYPOTESIS SCHOOL
+  hypotesis_school:
+    build: hypotesis_school/.
+    container_name: hypotesis_school
+    image: hypotesis_school:latest
+    working_dir: ${HYP_SCHOOL_WORKDIR_BUILD}
+    environment:
+      - NODE_ENV=production
+      - HYP_MANAGER_URL=${HYP_MANAGER_SERVER}:${HYP_MANAGER_PORT}
+      - HYP_CONTEXT_URL=${HYP_CONTEXT_SERVER}:${HYP_CONTEXT_PORT}
+      - HYP_ITEM_URL=${HYP_ITEM_SERVER}:${HYP_ITEM_PORT}
+      - HYP_ENROL_URL=${HYP_ENROL_SERVER}:${HYP_ENROL_PORT}
+    env_file:
+      - hypotesis_school/.env
+    ports:
+      - ${HYP_SCHOOL_PORT}:${HYP_SCHOOL_PORT}
+    volumes:
+      - ./hypotesis_school/nginx.conf:/etc/nginx/nginx.conf
+      - ./hypotesis_school/default.conf:/etc/nginx/conf.d/default.conf
     stdin_open: true
     tty: true
     depends_on:

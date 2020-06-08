@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true" v-bind:create_href="create_href"/>
+      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="false"/>
       <div class="container-view">
 
           <div class="action_table">
@@ -53,6 +53,7 @@
             return {
                 title: 'Contextos',
                 contexts: 0,
+                create_href: '',
                 filter: null,
                 fields: [
                     {

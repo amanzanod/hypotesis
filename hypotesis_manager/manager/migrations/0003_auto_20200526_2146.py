@@ -248,6 +248,7 @@ def add_users(apps, schema_editor):
     role_teacher = role.objects.get(alias='teacher')
     role_author = role.objects.get(alias='author')
     role_secretary = role.objects.get(alias='secretary')
+    role_director = role.objects.get(alias='director')
     province = apps.get_model('manager', 'Province')
     province_madrid = province.objects.get(code='28')
     province_barcelona = province.objects.get(code='08')
@@ -305,11 +306,11 @@ def add_users(apps, schema_editor):
                        role=role_student, language=language_es, visible_at=timezone.now(),
                        state_at=timezone.now(), picture='profile/sijiso.png')
     user_object.save()
-    user_object = user(username='masaro', password='12345', state=state_active, is_visible=True,
+    user_object = user(username='magaro', password='12345', state=state_active, is_visible=True,
                        name='Mario', surname1='García', surname2='Rodriguez', title='Software Developer',
                        email='devil29@hypotesis.com', province=province_madrid, country=country_es,
                        role=role_teacherpro, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(), picture='profile/masaro.png')
+                       state_at=timezone.now(), picture='profile/magaro.png')
     user_object.save()
     user_object = user(username='remomo', password='12345', state=state_unactive, is_visible=True,
                        name='Rebeca', surname1='Molina', surname2='Montoro', title='Programador Python',
@@ -400,6 +401,12 @@ def add_users(apps, schema_editor):
                        email='stema@hypotesis.com', province=province_madrid, country=country_es,
                        role=role_student, language=language_en, visible_at=timezone.now(),
                        state_at=timezone.now(), picture='profile/stema.png')
+    user_object.save()
+    user_object = user(username='jorope', password='12345', state=state_unactive, is_visible=True,
+                       name='José', surname1='Rodriguez', surname2='Pérez', title='Director Escuela',
+                       email='jorope@hypotesis.com', province=province_madrid, country=country_es,
+                       role=role_director, language=language_en, visible_at=timezone.now(),
+                       state_at=timezone.now(), picture='profile/jorope.png')
     user_object.save()
 
 

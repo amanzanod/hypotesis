@@ -257,7 +257,6 @@
 
                     fetch(HYP_CONTEXT_CATEGORY, requestOptions)
                         .then(response => {
-                            console.log(response);
                             if (response.status < 300) {
                                 this.text_modal = 'Se ha creado la categoría';
                                 this.$router.replace({ name: 'Categories'});

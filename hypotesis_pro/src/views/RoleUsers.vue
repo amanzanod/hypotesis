@@ -39,7 +39,7 @@
               <template v-slot:cell(name)="data">
                   <div class="user-name">
                       <div class="picture_mini">
-                        <b-img :src="data.item.picture"></b-img>
+                          <b-img :src="ip_manager + data.item.picture"></b-img>
                       </div>
                       <div class="data">
                           <router-link class="fullname" :to="{ name: 'User', params: { username: data.item.username }}">{{ data.value }}</router-link>
@@ -65,7 +65,7 @@
 <script>
 
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
-    import {HYP_MANAGER_ROLE} from '../api/constants';
+    import {HYP_MANAGER_ROLE, HYP_LOCAL_IP_PORT} from '../api/constants';
 
     export default {
         name: 'RoleUsers',
@@ -80,6 +80,7 @@
                 selected: null,
                 options: [],
                 filter: null,
+                ip_manager: HYP_LOCAL_IP_PORT,
                 fields: [
                     {
                         key: 'state',

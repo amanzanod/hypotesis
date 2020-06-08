@@ -1,33 +1,15 @@
-//const HYPOTESIS_MANAGER_URL = 'http://127.0.0.1:8000/api/';
+const HYP_LOCAL_IP = '192.168.99.100';
 
-const HYP_MANAGER_URL = process.env.HYP_MANAGER_URL;
-const HYP_CONTEXT_URL = process.env.HYP_CONTEXT_URL;
-const HYP_ITEM_URL = process.env.HYP_ITEM_URL;
-const HYP_ENROL_URL = process.env.HYP_ENROL_URL;
-console.log(HYP_MANAGER_URL);
-console.log(HYP_CONTEXT_URL);
-console.log(HYP_ITEM_URL);
-console.log(HYP_ENROL_URL);
+const HYP_LOCAL_IP_PORT = 'http://' + HYP_LOCAL_IP + ':8000';
+let manager_url = 'http://' + HYP_LOCAL_IP + ':8000/api/';
+let context_url = 'http://' + HYP_LOCAL_IP + ':8001/api/';
+//let item_url = 'http://' + HYP_LOCAL_IP + ':8002/api/';
+let enrol_url = 'http://' + HYP_LOCAL_IP + ':8003/api/';
 
-let manager_url = '';
-let context_url = '';
-
-if (HYP_MANAGER_URL) {
-    manager_url = 'http://' + HYP_MANAGER_URL + '/api/';
-} else {
-    manager_url = 'http://192.168.99.100:8000/api/';
-}
-
-if (HYP_CONTEXT_URL) {
-    context_url = 'http://' + HYP_CONTEXT_URL + '/api/';
-} else {
-    context_url = 'http://127.0.0.1:8001/api/';
-}
 
 const HYP_MANAGER_USER = manager_url + 'user/';
 const HYP_MANAGER_ROLE = manager_url + 'role/';
 const HYP_MANAGER_PROVINCE = manager_url + 'province/';
-const HYP_MANAGER_COUNTRY = manager_url + 'country/';
 const HYP_MANAGER_STATE = manager_url + 'state/';
 const HYP_MANAGER_LANGUAGE = manager_url + 'language/';
 const HYP_MANAGER_PERMISSION = manager_url + 'permission/';
@@ -44,13 +26,16 @@ const HYP_CONTEXT_FORMAT = context_url + 'format/';
 const HYP_CONTEXT_LANGUAGE = context_url + 'language/';
 const HYP_CONTEXT_LEVEL = context_url + 'level/';
 
+//const HYP_ITEM_ITEM = item_url + 'item/';
+const HYP_ENROL_ENROL = enrol_url + 'enrol/';
+
 export {
+    HYP_LOCAL_IP_PORT,
     HYP_MANAGER_USER,
     HYP_MANAGER_ROLE,
     HYP_MANAGER_PERMISSION,
     HYP_MANAGER_CONTEXT,
     HYP_MANAGER_PROVINCE,
-    HYP_MANAGER_COUNTRY,
     HYP_MANAGER_STATE,
     HYP_MANAGER_LANGUAGE,
     HYP_CONTEXT_GRADE,
@@ -62,5 +47,7 @@ export {
     HYP_CONTEXT_STATE,
     HYP_CONTEXT_FORMAT,
     HYP_CONTEXT_LANGUAGE,
-    HYP_CONTEXT_LEVEL
+    HYP_CONTEXT_LEVEL,
+    //HYP_ITEM_ITEM,
+    HYP_ENROL_ENROL
 };

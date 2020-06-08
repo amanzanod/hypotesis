@@ -33,7 +33,8 @@ CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
-    "http://192.168.99.100"
+    "http://192.168.99.100",
+    "http://192.168.99.100:81"
 ]
 
 # Application definition

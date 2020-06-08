@@ -35,7 +35,7 @@
                   <span v-html="icon.value"></span>
               </template>
               <template v-slot:cell(users)="data">
-                  <router-link class="relation" :to="data">Matricular</router-link>
+                  <router-link class="relation" :to="{ name: 'GradeEnrol', params: { alias: data.item.alias }}">Matricular</router-link>
               </template>
               <template v-slot:cell(category)="data">
                   <router-link class="relation" :to="{ name: 'Category', params: { alias: data.item.category.alias }}">{{data.item.category.name}}</router-link>

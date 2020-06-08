@@ -18,5 +18,5 @@ FROM nginx:1.13.12-alpine as production-stage
 COPY --from=build-stage /app/dist /var/www/html
 RUN chown -R nginx:nginx /var/www/html
 
-EXPOSE 80
+EXPOSE 81
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,9 +1,9 @@
 #!/bin/bash
 echo "*** EXECUTING DJANGO HYPOTESIS ITEM ... ***"
 echo "Wait for DB ..."
-sleep 0m 15s
-echo "15s"
-sleep 0m 15s
+sleep 0m 50s
+echo "50s"
+sleep 0m 50s
 echo "Running ..."
 # Collect static files
 #echo "Collect static files"
