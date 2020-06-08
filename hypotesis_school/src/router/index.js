@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Users from '../views/Users.vue'
 
 Vue.use(VueRouter);
 
@@ -14,169 +13,92 @@ Vue.use(VueRouter);
   {
       path: '/',
       name: 'Home',
-      component: Users,
+      component: () => import('../views/Home.vue'),
       meta: 'Inicio'
   },
   {
-      path: '/users',
-      name: 'Users',
-      component: Users,
-      meta: 'Usuarios'
+      path: '/course_start/:alias',
+      name: 'CourseStart',
+      component: () => import('../views/CourseStart.vue'),
+      meta: 'Portada Curso'
   },
   {
-      path: '/users/:username',
-      name: 'User',
-      meta: 'Usuario',
-      component: () => import('../views/User.vue'),
-      props: true
+      path: '/course_news/:alias',
+      name: 'CourseNews',
+      component: () => import('../views/CourseNews.vue'),
+      meta: 'Tablón'
   },
   {
-      path: '/roles',
-      name: 'Roles',
-      meta: 'Roles',
-      component: () => import('../views/Roles.vue')
+      path: '/course_competences/:alias',
+      name: 'CourseCompetences',
+      component: () => import('../views/CourseCompetences.vue'),
+      meta: 'Competencias'
   },
   {
-      path: '/assign_permissions',
-      name: 'AssignPermissions',
-      meta: 'Asignar Permisos',
-      component: () => import('../views/AssignPermissions.vue')
+      path: '/course_users/:alias',
+      name: 'CourseUsers',
+      component: () => import('../views/CourseUsers.vue'),
+      meta: 'Participantes'
   },
   {
-      path: '/roles/:alias',
-      name: 'Role',
-      meta: 'Rol',
-      component: () => import('../views/Role.vue'),
-      props: true
+      path: '/course_itinerary/:alias',
+      name: 'CourseItinerary',
+      component: () => import('../views/CourseItinerary.vue'),
+      meta: 'Itinerario'
   },
   {
-      path: '/roles/:alias/permissions',
-      name: 'RolePermissions',
-      meta: 'Permisos de Rol',
-      component: () => import('../views/RolePermissions.vue'),
-      props: true
+      path: '/course_forum/:alias',
+      name: 'CourseGrades',
+      component: () => import('../views/CourseForum.vue'),
+      meta: 'Foro'
   },
   {
-      path: '/roles/:alias/users',
-      name: 'RoleUsers',
-      meta: 'Usuarios de Rol',
-      component: () => import('../views/RoleUsers.vue'),
-      props: true
+      path: '/user_profile',
+      name: 'UserProfile',
+      component: () => import('../views/UserProfile.vue'),
+      meta: 'Perfil'
   },
   {
-      path: '/permissions',
-      name: 'Permissions',
-      meta: 'Permisos',
-      component: () => import('../views/Permissions.vue')
+      path: '/user_courses',
+      name: 'UserCourses',
+      component: () => import('../views/UserCourses.vue'),
+      meta: 'Mis Cursos'
   },
   {
-      path: '/permissions/:alias',
-      name: 'Permission',
-      meta: 'Permiso',
-      component: () => import('../views/Permission.vue'),
-      props: true
+      path: '/user_schedule',
+      name: 'UserSchedule',
+      component: () => import('../views/UserSchedule.vue'),
+      meta: 'Calendario'
   },
   {
-      path: '/contexts',
-      name: 'Contexts',
-      meta: 'Contextos',
-      component: () => import('../views/Contexts.vue')
-  },
-  {
-      path: '/grades',
-      name: 'Grades',
-      meta: 'Grados',
-      component: () => import('../views/Grades.vue')
-  },
-  {
-      path: '/grades/:alias',
-      name: 'Grade',
-      meta: 'Grado',
-      component: () => import('../views/Grade.vue')
-  },
-  {
-      path: '/masters',
-      name: 'Masters',
-      meta: 'Másters',
-      component: () => import('../views/Masters.vue')
-  },
-  {
-      path: '/masters/:alias',
-      name: 'Master',
-      meta: 'Máster',
-      component: () => import('../views/Master.vue')
-  },
-  {
-      path: '/courses',
-      name: 'Courses',
-      meta: 'Courses',
-      component: () => import('../views/Courses.vue')
-  },
-  {
-      path: '/courses/:alias',
-      name: 'Course',
-      meta: 'Curso',
-      component: () => import('../views/Course.vue')
-  },
-  {
-      path: '/classrooms',
-      name: 'Classrooms',
-      meta: 'Aulas',
-      component: () => import('../views/Classrooms.vue')
-  },
-  {
-      path: '/classrooms/:alias',
-      name: 'Classroom',
-      meta: 'Aula',
-      component: () => import('../views/Classroom.vue')
-  },
-  {
-      path: '/classrooms/:alias/enrol',
-      name: 'ClassroomEnrol',
-      meta: 'Aula',
-      component: () => import('../views/ClassroomEnrol.vue')
-  },
-  {
-      path: '/categories',
-      name: 'Categories',
-      meta: 'Categorías',
-      component: () => import('../views/Categories.vue')
-  },
-  {
-      path: '/categories/:alias',
-      name: 'Category',
-      meta: 'Categoría',
-      component: () => import('../views/Category.vue')
-  },
-  {
-      path: '/notifications',
-      name: 'Notifications',
+      path: '/user_notifications',
+      name: 'UserNotifications',
       meta: 'Notificaciones',
-      component: () => import('../views/Notifications.vue')
+      component: () => import('../views/UserNotifications.vue')
   },
   {
-      path: '/forum',
-      name: 'Forum',
+      path: '/school_courses',
+      name: 'SchoolCourses',
+      meta: 'Oferta Cursos',
+      component: () => import('../views/SchoolCourses.vue')
+  },
+  {
+      path: '/school_news',
+      name: 'SchoolNews',
+      meta: 'Noticias',
+      component: () => import('../views/SchoolNews.vue')
+  },
+  {
+      path: '/school_forum',
+      name: 'SchoolForum',
       meta: 'Foro',
-      component: () => import('../views/Forum.vue')
+      component: () => import('../views/SchoolForum.vue')
   },
   {
-      path: '/news',
-      name: 'News',
-      meta: 'Tablón Anuncios',
-      component: () => import('../views/News.vue')
-  },
-  {
-      path: '/reports',
-      name: 'Reports',
-      meta: 'Informes',
-      component: () => import('../views/Reports.vue')
-  },
-  {
-      path: '/admin',
-      name: 'Admin',
-      meta: 'Administración',
-      component: () => import('../views/Admin.vue')
+      path: '/school_admin',
+      name: 'SchoolAdmin',
+      meta: 'Trámites',
+      component: () => import('../views/SchoolAdmin.vue')
   },
   {
       name: '404',

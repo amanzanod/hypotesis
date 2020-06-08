@@ -13,13 +13,13 @@
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
 
     export default {
-        name: 'Forum',
+        name: 'Home',
         components: {
             ContainerHeaderApp
         },
         data() {
             return {
-                title: 'Foro',
+                title: 'Inicio',
                 create_href: '',
                 contexts: 0,
             }

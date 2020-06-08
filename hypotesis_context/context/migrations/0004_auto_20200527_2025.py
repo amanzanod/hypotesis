@@ -31,43 +31,45 @@ def add_courses(apps, schema_editor):
     context = apps.get_model('context', 'Context')
     course_object = context(name='Curso básico de Django 3 con Python', alias='dgbd', state=state_active,
                             is_visible=True, type=context_type_course, language=language_es,
-                            category=category_python, level=level_begin, )
+                            category=category_python, level=level_begin, duration=120, teacher_main='blafega',
+							picture='profile/dgbd.png')
     course_object.save()
     course_object = context(name='Curso avanzado de Moodle para Desarrolladores', alias='camd', state=state_active,
                             is_visible=True, type=context_type_course, language=language_es,
-                            category=category_moodle, level=level_advanced, )
+                            category=category_moodle, level=level_advanced, duration=40 )
     course_object.save()
     course_object = context(name='Curso de integración continua con Jenkins', alias='cicj', state=state_active,
                             is_visible=True, type=context_type_course, language=language_es,
-                            category=category_deploy, level=level_medium, )
+                            category=category_deploy, level=level_medium, duration=60, teacher_main='mismi',
+							picture='profile/cicj.png')
     course_object.save()
     course_object = context(name='Curso avanzado de ciberseguridad en PHP', alias='sgphp', state=state_paused,
                             is_visible=True, type=context_type_course, language=language_es,
-                            category=category_php, level=level_advanced, )
+                            category=category_php, level=level_advanced, duration=30 )
     course_object.save()
     course_object = context(name='Creación de contenedores con Docker', alias='dock', state=state_active,
                             is_visible=False, type=context_type_course, language=language_es,
-                            category=category_docker, level=level_advanced, )
+                            category=category_docker, level=level_advanced, duration=45 )
     course_object.save()
     course_object = context(name='Maquetación web con HTML5 y CSS3', alias='htcss', state=state_creating,
                             is_visible=True, type=context_type_course, language=language_es,
-                            category=category_html, level=level_begin, )
+                            category=category_html, level=level_begin, duration=52 )
     course_object.save()
     course_object = context(name='Diseño web con Adobe XD avanzado', alias='xdavz', state=state_finished,
                             is_visible=True, type=context_type_course, language=language_es,
-                            category=category_ux, level=level_advanced, )
+                            category=category_ux, level=level_advanced, duration=40 )
     course_object.save()
     course_object = context(name='Aprenda a manejar Postman como un experto', alias='apostc', state=state_finished,
                             is_visible=True, type=context_type_course, language=language_es,
-                            category=category_postman, level=level_advanced, )
+                            category=category_postman, level=level_advanced, duration=20 )
     course_object.save()
     course_object = context(name='Creación de instancias y redes en AWS', alias='arawsc', state=state_finished,
                             is_visible=True, type=context_type_course, language=language_es,
-                            category=category_aws, level=level_medium, )
+                            category=category_aws, level=level_medium, duration=100 )
     course_object.save()
     course_object = context(name='Aplicaciones con Laravel y Vue 3', alias='larvu', state=state_finished,
                             is_visible=True, type=context_type_course, language=language_es,
-                            category=category_php, level=level_begin, )
+                            category=category_php, level=level_begin, duration=60 )
     course_object.save()
 
 

@@ -135,7 +135,7 @@ class Context(BaseModel):
     is_visible = models.BooleanField(default=False, null=False, verbose_name=_('is visible'))
     # Description fields.
     description = models.TextField(max_length=500, null=True, blank=True, verbose_name=_('description'))
-    picture = models.ImageField(null=True, blank=True, verbose_name=_('picture'))
+    picture = models.ImageField(null=True, blank=True, upload_to='profile', verbose_name=_('picture'))
     syllabus = models.TextField(max_length=500, null=True, blank=True, verbose_name=_('syllabus'))
     requeriments = models.TextField(max_length=500, null=True, blank=True, verbose_name=_('requeriments'))
     level = models.ForeignKey('Level', on_delete=models.SET_NULL, null=True,

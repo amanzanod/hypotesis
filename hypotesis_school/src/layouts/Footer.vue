@@ -2,7 +2,7 @@
     <footer id="footer">
         <div class="grey_stripe left"></div>
         <span class="title_footer">
-          © 2020 - Hypotesis PRO • Antonio Manzano Díaz • TFG Grado Multimedia • <span class="underline">Política de Privacidad y Política de Cookies</span>
+          © 2020 - Hypotesis Code • Antonio Manzano Díaz • TFG Grado Multimedia • <span class="underline">Política de Privacidad y Política de Cookies</span>
         </span>
         <div class="grey_stripe right"></div>
     </footer>

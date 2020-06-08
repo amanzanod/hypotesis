@@ -262,7 +262,7 @@ def add_users(apps, schema_editor):
                        name='Antonio', surname1='Manzano', surname2='Díaz', title='Creador Multimedia',
                        email='amanzanod@uoc.edu', province=province_madrid, country=country_es,
                        role=role_student, language=language_es, visible_at=timezone.now(),
-                       state_at=timezone.now(), picture='profile/amanzanod.png')
+                       state_at=timezone.now(), picture='profile/amanzanod.png', about_me='<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p> <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet</p>')
     user_object.save()
     user_object = user(username='mamaga', password='12345', state=state_active, is_visible=True,
                        name='María', surname1='Mata', surname2='García', title='Programador PHP',

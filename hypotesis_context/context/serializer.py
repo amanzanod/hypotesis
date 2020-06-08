@@ -84,6 +84,8 @@ class ContextSerializer(serializers.ModelSerializer):
 
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
     updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
+    start_at = serializers.DateTimeField(format="%Y-%m-%d ", read_only=True)
+    end_at = serializers.DateTimeField(format="%Y-%m-%d ", read_only=True)
 
     # Meta.
     class Meta:

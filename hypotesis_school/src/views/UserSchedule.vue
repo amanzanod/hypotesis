@@ -1,0 +1,42 @@
+<template>
+
+  <div id="router-view">
+      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="false" v-bind:create_href="create_href"/>
+      <div class="container-view">
+      </div>
+  </div>
+
+</template>
+
+<script>
+
+    import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
+
+    export default {
+        name: 'UserSchedule',
+        components: {
+            ContainerHeaderApp
+        },
+        data() {
+            return {
+                title: 'Calendario',
+                create_href: '',
+                contexts: 0,
+            }
+        },
+    }
+
+</script>
+
+<style lang="scss">
+
+    #router-view {
+        .container-view {
+            background-color: white;
+            border: 1px solid #DFDFDF;
+            padding: 30px;
+
+
+        }
+    }
+</style>

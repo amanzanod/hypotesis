@@ -1,7 +1,7 @@
 <template>
 
   <div id="router-view">
-      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="true"/>
+      <ContainerHeaderApp v-bind:num="contexts" v-bind:title="title" v-bind:list="false" v-bind:create_href="create_href"/>
       <div class="container-view">
       </div>
   </div>
@@ -13,13 +13,14 @@
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
 
     export default {
-        name: 'Admin',
+        name: 'CourseCompetences',
         components: {
             ContainerHeaderApp
         },
         data() {
             return {
-                title: 'Administración',
+                title: 'Competencias',
+                create_href: '',
                 contexts: 0,
             }
         },

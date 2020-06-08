@@ -8,10 +8,10 @@
         </b-modal>
         <div class="logo">
             <img id="logo_main" src="../assets/logo_login.svg"  alt="Hypotesis"/>
-            <img id="logo_main_pro" src="../assets/pro.svg"  alt="PRO"/>
+            <img id="logo_main_pro" src="../assets/school.svg"  alt="School"/>
         </div>
         <div class="login-container">
-            <div class="login-header">Inicia sesión en Hypotesis PRO</div>
+            <div class="login-header">Inicia sesión en Hypotesis Code</div>
             <div class="login-form">
 
                 <b-form @submit="onSubmit" class="hyp-form" v-if="show">
@@ -41,7 +41,7 @@
                 <router-link class="recovery" :to="{ name: 'Login'}">¿Has olvidado la contraseña?</router-link>
             </div>
         </div>
-        <span class="text-legal">Hypotesis PRO • Antonio Manzano Díaz • TFG Grado Multimedia</span>
+        <span class="text-legal">Hypotesis Code • Antonio Manzano Díaz • TFG Grado Multimedia</span>
     </div>
 
 
@@ -80,7 +80,7 @@
                     .then(response =>  {
                         if (response.status === 202) {
                             localStorage.setItem("username", this.form.username);
-                            this.$router.replace({ name: 'Users'});
+                            this.$router.replace({ name: 'UserProfile'});
                         } else {
                             console.log(response);
                             this.showModal();
@@ -126,8 +126,8 @@
                         width: 300px;
                     }
                     #logo_main_pro {
-                        width: 91px;
-                        margin: 10px 0 20px;
+                        width: 133px;
+                        margin: 21px 0 23px;
                     }
                 }
                 .login-container {
@@ -177,7 +177,7 @@
                             }
                         }
                         button {
-                            background-color: #1A5A64;
+                            background-color: #66a6af;
                             color: white;
                             width: 390px;
                             height: 39px;

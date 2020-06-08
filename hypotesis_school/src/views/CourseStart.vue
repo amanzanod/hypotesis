@@ -13,13 +13,13 @@
     import ContainerHeaderApp from '@/layouts/ContainerHeader.vue';
 
     export default {
-        name: 'Reports',
+        name: 'CourseStart',
         components: {
             ContainerHeaderApp
         },
         data() {
             return {
-                title: 'Informes',
+                title: 'Portada Curso',
                 create_href: '',
                 contexts: 0,
             }
