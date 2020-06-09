@@ -2,6 +2,13 @@
 
 Trabajo Final del Grado Multimedia
 
+### Variables de entorno
+```
+.env.example --> .env
+```
+
+Es necesario reemplazar los archivos .env.example en todas las carpetas de los servicios y modificar los valores si fuera necesario.
+
 ### Docker Compose
 
 #### Arrancar el proyecto
